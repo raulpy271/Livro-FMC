@@ -1,0 +1,33 @@
+Agora como descrito em \cite{carmo2013}, os conjuntos podem ser usados para criar novos conjuntos, este conceito recebe o nome de \textbf{axioma da especificação} e pode ser descrito como dito em \cite{halmos2001} como se segue. 
+
+\begin{axioma}[Axioma da especificação]\label{axi:TC-Especificacao}
+	\cite{halmos2001} Para todo conjunto $A$ e toda propriedade $\textbf{P}$, existe um conjunto $B$ tal que os elementos de $B$ são exatamente elementos que pertencem a $A$ e possuem (ou satisfazem) $\textbf{P}.$
+\end{axioma}
+
+De forma precisa na notação compacta, o axioma da especificação é escrito como: 
+$$B = \{x \mid x \in A \mbox{ e } x \mbox{ satisfaz } \textbf{P}\}$$ 
+onde $\textbf{P}$ seria a propriedade que define o conjunto $B$. Porém, também é comum encontrar na literatura (ver \cite{halmos2001}) a notação:
+$$B = \{x \in A \mid \textbf{P}\}$$
+para simplificar a escrita de conjuntos construídos pelo axioma da especificação, neste manuscrito sempre que possível será usada a segunda notação.
+
+\begin{exem}
+	Dado o conjunto dos $\mathbb{N}$ pelo axioma da especificação é definido o conjunto $P = \{n \in \mathbb{N} \mid n = 2k \mbox{ para algum } k \in \mathbb{N}\}$.
+\end{exem}
+
+\begin{exem}
+	Dado o conjunto de todas as pessoas da terra denotado por $T$, pelo Axioma \ref{axi:TC-Especificacao} é obtido o conjunto $A = \{p \in T \mid T \mbox{ é um aluno de computação da UNIVASF}\}$.
+\end{exem}
+
+
+
+A partir das ideias envolvidas como subconjunto é possível relaciona-los de forma a determinar se o mesmo são iguais, isto é, feito utilizando o chamado axioma da extensão definido a seguir. 
+
+\begin{axioma}[Axioma da extensão]\label{axi:TC-Exntesao}
+	\cite{halmos2001} Dois conjuntos são iguais se, e somente se, eles têm os mesmos elementos.
+\end{axioma}
+
+Agora o leitor deve ter cuidado com tal axioma, pois tal axioma não é apenas uma propriedade lógica que a igualdade deve ter, e sim uma propriedade não trivial sobre a relação de pertinência, para detalhes consulte o capítulo inicial de \cite{halmos2001}.
+
+
+
+=============>>>  urelementos 

@@ -1,0 +1,16 @@
+% -----------------------------------------
+% A capa
+% -----------------------------------------
+
+\begingroup
+    % Para suprimir as formatações padrões definidas
+    \thispagestyle{empty}
+    % Construíndo a image da capa
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=\paperwidth]{background.pdf}};
+        \draw (current page.center) node [fill=ocre!30!white,fill opacity=0.6,text opacity=1,inner sep=1cm]{\Huge\centering\bfseries\sffamily\parbox[c][][t]{\paperwidth}{\centering Fundamentos da Computação\\[15pt] % Book title
+        {\Large Notas de aula sobre os Príncipios Matemáticos da Computação}\\[20pt] % Subtitle
+        {\huge Prof. Valdigleis S. Costa}}}; % Author name
+    \end{tikzpicture}
+    \vfill
+\endgroup

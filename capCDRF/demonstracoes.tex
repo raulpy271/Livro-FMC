@@ -1,0 +1,929 @@
+% Seta a imagem do capítulo
+\chapterimage{chapter_head_2.pdf}
+% O título e rótulo do cabiluto
+\chapter{Métodos de Demonstração}\label{cap:Demonstracoes}
+
+%\epigraph{Mais um colchão, mais uma demonstração}{Paul Erdös}
+
+\epigraph{Um matemático é uma máquina que transforma café em teoremas.}{Paul Erdös}
+
+\section{Introdução}\label{sec:Introducao-Demonstracoes}
+
+No capítulo anterior, o leitor encontrou diversas demonstrações dentro da teoria intuitiva (ou Cantoriana) dos conjuntos. Para um leitor iniciante, talvez tenha sido um tanto quanto complicado entender a metodologia usada para construir tais demonstrações. E uma vez que, as demonstrações são figuras de interesse central no cotidiano dos matemáticos, cientistas da computação e engenheiros de software, em especial aqueles que trabalham com métodos formais, este texto irá fazer uma breve pausa no estudo da teoria dos conjuntos, para apresentar um pouco de teoria da prova ao leitor.
+
+Este capítulo começa então com o seguinte questionamento: Do ponto de vista da ciência da computação qual a importância das demonstrações? Bem a resposta a essa pergunta pode ser dada de dois pontos de vista,  um teórico (purista) e um prático (aplicado ou de engenharia).
+
+Na perspectiva de um cientista da computação puro, as demonstrações de teoremas são a principal ferramenta para investigar os limites dos diferentes modelos de computação propostos \cite{hopcroft2008, linz2006}, assim sendo é de suma importância que o estudante de graduação em ciência da computação receba em sua formação pelo menos o básico para dominar a ``arte'' de provar teoremas, sendo assim preparado para o estudo e a pesquisa pura em computação e(ou) matemática.
+
+Já na visão prática, só existe uma forma segura de garantir que um \textit{software} está livre de erros, essa ``tecnologia'' é exatamente a demonstração das propriedades do \textit{software}. É claro que, mostrar que um \textit{software} não possui erros vai exigir que o \textit{software} seja visto através de um certo nível de formalismo e rigor matemático, mas após essa modelagem através de demonstrações pode-se garantir que um \textit{software} não apresentará erros, e assim se algo errado ocorrer foi por fatores externos, tais como defeito no \textit{hardware} por exemplo, e não por problemas com a implementação. Este conceito é o cerne de uma área da engenharia de \textit{software} \cite{pressman2016}, chamada métodos  (ou especificações) formais, sendo essa área o ponto crucial no desenvolvimento de \textit{softwares} para sistemas críticos \cite{sommerville2011}. Isto já mostra a grande importância de programadores e engenheiros de \textit{software} terem em sua formação as bases para o domínio das técnicas de demonstração.
+
+Nas próxima seções deste manuscrito serão descritas as principais técnicas de demonstração de interesse de matemáticos, cientistas da computação e engenheiros formais de \textit{software}. 
+
+\begin{rema}
+	Para o leitor que nunca antes teve contato com a lógica matemática recomenda-se que antes de estudar este capítulo, o leitor faça pelo menos um rápido estudo do Capítulo \ref{cap:IntroducaoLogica}.
+\end{rema}
+
+Para pode falar sobre métodos de demonstração e poder então descrever como os matemáticos, lógicos e cientistas da computação justificam enunciados usando apenas a argumentação matemática, será necessário fixar algumas nomenclaturas e listar alguns conceitos importantes.
+
+\begin{definition}[Enunciado]\label{def:Enunciado}
+	Um enunciado é qualquer frase declarativa que possa ser expressa na linguagem da lógica simbólica.
+\end{definition}
+
+Para que uma demonstração de um enunciado possa ser aceita como correta, é comum exigir que a argumentação de tal demonstração deve conter um alto nível de rigor (formalismo) matemático, além disso, quanto maior for a riqueza\footnote{A riqueza de detalhes que uma demonstração tem pode variar, a depender para quem a prova se destina, por exemplo, uma prova escrita para um físico em geral não se preocupa com os por menores do linguajá matemático, diferentemente de uma prova escrita para matemáticos, onde os menores detalhes da linguagem matemática são considerados como informações relevantes.} de detalhes, mas fácil é de se entender as demonstrações.
+
+Os métodos de demonstração apresentadas neste manuscrito seguem as ideias e a forma apresentada em \cite{velleman2019comProvar}. Aqui as argumentações de uma dada demonstração serão realizadas em um ambiente similar ao um ``tabuleiro'' de jogo. O tabuleiro é a ferramenta utilizada para realizar e organizar as deduções que formam a demonstração de cada enunciado. 
+
+Neste manuscrito o tabuleiro será visto como uma tabela dividido em 4 colunas: a coluna 1 marcar o número do estado da prova\footnote{Usando a ideia de cada linha no tabuleiro ser vista como um estado na prova, permite enxergar uma demonstração na forma de um autômato finito determinístico \cite{hopcroft2008}, esse tipo de visão é similar ao que acontece em demonstrações usando o provador de teoremas Coq \cite{coq2013}.}, a coluna 2 contém um rascunho do texto final da demonstração, a coluna 3 guarda os dados\footnote{Os dados são sempre argumentos verdadeiros, hipótese que estão sendo assumidas como verdadeiras ou novas informações obtidas a partir de dados já existentes anteriormente no tabuleiro.} disponíveis e a coluna 4 guarda os objetivos a serem alcançados.  O ``jogo'' da demonstração acaba, isto é, a demonstração termina quando  todos os objetivos forem transformados em dados.
+
+\begin{rema}
+	Sempre que possível dentro do tabuleiro algumas sentenças serão escritas em notação matemática para tornar as informações menos verbosas.
+\end{rema}
+
+Agora o leitor pode estar a se questionar, como é construído o tabuleiro da demonstração de um determinado enunciado? Ou ainda como é produzido o texto final da demonstração a partir deste tabuleiro? As respostas para estas perguntas serão dadas a seguir. 
+
+\section{Demonstrando Implicações}\label{sec:ProvandoImplicacao}
+
+Demonstrar uma implicação consiste em construir uma prova (ou argumento) que mostre a veracidade de uma sentença com a seguinte natureza: 
+
+\begin{center}
+	Se $\alpha$, então $\beta$. 
+\end{center}
+
+Onde $\alpha$ e $\beta$ são proposições ou predicados (para detalhes ver a Seção \ref{sec:Argumento-Proposicao-Predicado}). Existe duas metodologia distintas para a demonstração de implicações sendo essas: a demonstração direta e a demonstração por contra positiva.
+
+\begin{method}[Direto]\label{metodo:Direto}
+	Uma demonstração direta de um enunciado da forma: Se $\alpha$, então $\beta$.   Consiste em:
+	\begin{enumerate}
+		\item Supor que o antecedente $\alpha$ da implicação é verdadeiro.
+		\item Provar que o consequente $\beta$ da implicação é verdadeiro, usando para isso o fato de $\alpha$ ser verdadeiro como uma premissa.
+	\end{enumerate}
+\end{method}
+
+O método direto para demonstrar implicações descrito acima nada mais é do que um uso da regra de introdução da implicação dos sistemas dedutivos encontrados no estudo da lógica  (ver Seção  \ref{sec:SistemaDedutivo}). 
+
+Com respeito a ideia de tabuleiro de demonstração o mesmo se comporta da seguinte forma ao usar o método direto, dado um estado $i$ de uma prova cujo o objetivo é demonstrar uma implicação, o estado $i+1$ irá ter a coluna de dados atualizada afim de adicionar o antecedente da implicação, por sua vez, a coluna dos objetivos também será atualizada para ter como objetivo apenas o consequente em vez da implicação original, depois com mais $n$ linhas é desenvolvida a demonstração de $\beta$ o que faz $\beta$ se torne um dado finalizando assim a prova, o tabuleiro a seguir ilustra essa descrição.
+
+\begin{table*}[h]
+	\centering
+	\begin{tabular}{c|l|l|l}
+		\hline
+		\rowcolor{cinzaClaro}
+		Estado & Rascunho & Dados & Objetivo\\
+		\hline
+		$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$\\
+		$i$ & $\cdots$ &$\gamma_1, \cdots, \gamma_n$ & Se $\alpha$, então $\beta$.\\
+		$i+1$ & $\cdots$ & $\gamma_1, \cdots, \gamma_n, \alpha$ & $\beta$.\\
+		$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$\\
+		$i+n+1$ & $\cdots$ & $\gamma_1, \cdots, \gamma_n, \alpha, \beta$ & \\
+		\hline
+	\end{tabular}
+\end{table*}
+
+O exemplo a seguir irá mostrar uma demonstração para um teorema clássico sobre os números inteiros usando as ideias de método direto de demonstrar implicações e de tabuleiro de demonstração.
+
+
+\begin{exem}\label{exe:DemonstracaoImplicacao1}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Se $n$ é par, então seu quadrado também é um número par.
+	\end{center}
+	Aqui será reescrito tal enunciado utilizando apenas um pouco da linguagem da lógica proposicional (ver Capítulo \ref{cap:LogicaProposicional}), obtendo com isso a seguinte forma para tal enunciado:
+	\begin{center}
+		$n \mbox{ é par } \Rightarrow n^2 \mbox{ é par}$
+	\end{center}
+	Assim é iniciado o desenvolvimento da prova através do seguinte tabuleiro:
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $n \mbox{ é par } \Rightarrow n^2 \mbox{ é par}$ \\
+			\hline
+		\end{tabular}
+	\end{table*}
+	
+	Note que o objetivo a ser demonstrado é uma implicação, assim pode-se utilizar o método direto de provar implicações para atualizar o tabuleiro obtendo com isso o estado número 2 da demonstração, ficando com tabuleiro da seguinte forma:
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $n \mbox{ é par } \Rightarrow n^2 \mbox{ é par}$ \\
+			2 & Suponha que $n$ é par & $n = 2i$ com $i \in \mathbb{Z}$ & $n^2 \mbox{ é par}$\\
+			\hline
+		\end{tabular}
+	\end{table*} 
+	
+	Desenvolvendo o quadrado de $n$ no estado $3$ obtem-se novos e dados e o tabuleiro fica da seguinte forma:
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $n \mbox{ é par } \Rightarrow n^2 \mbox{ é par}$ \\
+			2 & Suponha que $n$ é par & $n = 2i$ com $i \in \mathbb{Z}$ & $n^2 \mbox{ é par}$ \\
+			3 & Calculando $n^2$ tem-se: & $n = 2i$ e $n^2= 2(2i^2)$ & $n^2 \mbox{ é par}$ \\
+			& $n^2 = (2i)^2$ & com $i \in \mathbb{Z}$ &\\
+			& $\ \ = 4i^2$ & &\\
+			& $\ \ \ \ \ \ = 2(2i^2)$ & &\\
+			\hline
+		\end{tabular}
+	\end{table*}
+	
+	E por fim pode-se concluir a paridade de $n^2$ em um novo estado, ficando com o tabuleiro da seguinte forma.
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $n \mbox{ é par } \Rightarrow n^2 \mbox{ é par.}$ \\
+			2 & Suponha que $n$ é par. & $n = 2i$ com $i \in \mathbb{Z}$ & $n^2 \mbox{ é par.}$ \\
+			3 & Calculando $n^2$ tem-se: & $n = 2i$ e $n^2= 2(2i^2)$ & $n^2 \mbox{ é par.}$ \\
+			& $n^2 = (2i)^2$ & com $i \in \mathbb{Z}$ &\\
+			& $\ \ = 4i^2$ & &\\
+			& $\ \ = 2(2i^2)$ & &\\
+			4 & Fazendo $j = 2i^2$ tem-se que & $n = 2i$ com $i \in \mathbb{Z}$ e&\\
+			& $n^2$ é par & $n^2$ é par. &\\
+			\hline
+		\end{tabular}
+	\end{table*}
+	
+	Agora pode-se então utilizar o rascunho para construir o texto ``real'' da demonstração como se segue:
+	
+	\begin{proof}
+		Suponha que $n$ é um número par, logo existe um $i \in \mathbb{Z}$ tal que $n = 2i$, agora desenvolvendo $n^2$ tem-se que $n^2 = 2(2i^2)$, uma vez que a multiplicação e a potenciação são ambas fechadas sobre os inteiros tem-se que existe $k \in \mathbb{Z}$ tal que $k = 2i^2$, consequentemente, $n^2 = 2k$, e portanto, $n^2$ é par.
+	\end{proof} 
+\end{exem}
+
+\begin{rema}
+	Deste ponto em diante não será mais explicada passo a passo o desenvolvimento do tabuleiro, uma vez que o mesmo é autoexplicativo, bastando apenas o leitor acompanhar a coluna de rascunho para entender seu desenvolvimento. 
+\end{rema}
+
+\begin{exem}\label{exe:DemonstracaoImplicacao2}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Se $n$ é múltiplo de 4, então também é múltiplo de 2.
+	\end{center}
+	Como antes para simplificar a escrita dentro do tabuleiro será usado um pouco da linguagem proposicional para reescrever o enunciado ficando com:
+	\begin{center}
+		$n \mbox{ é múltiplo de 4} \Rightarrow n \mbox{ é múltiplo de 2.}$
+	\end{center}
+
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $n \mbox{ é múltiplo de 4}$\\
+			& & & $\Rightarrow n \mbox{ é múltiplo de 2.}$\\
+			2 & Suponha que $n$ é múltiplo de 4. & $n = 4i$ & $n \mbox{ é múltiplo de 2.}$\\
+			3 & Como $n = 4i$ pode-se reescrever  & $n = 2(2i)$ & $n \mbox{ é múltiplo de 2.}$\\
+			& o mesmo como $n = 2(2i)$ &  &\\
+			4 & Fazendo $j = 2i$ tem-se $n = 2j$ & $n \mbox{ é múltiplo de 2.}$ &\\
+			\hline
+		\end{tabular}
+	\end{table*}
+
+	Convertendo para o tabuleiro para texto tem-se a seguinte demonstração.
+	
+	\begin{proof}
+		Suponha que $n$ é múltiplo de 4, assim existe um $i$ tal que $n = 4i$, pode-se então reescrever $n$ como $n = 2(2i)$, fazendo $j = 2i$ tem-se $n = 2j$, e portanto, $n$ é múltiplo de $2$.
+	\end{proof}
+\end{exem}
+
+O segundo método para provar implicações é o método da contraposição, que como dito em \cite{menezes2010MD}, se baseia na equivalência semântica (ver Seção \ref{sec:SistemaSemantico}) da expressão ``Se $\alpha$, então $\beta$'' com a expressão ``Se não $\beta$, então não $\alpha$''. O método de demonstração por contraposição é formalizado a seguir.
+
+\begin{method}[Contraposição]\label{metodo:Contraposição}
+	Uma demonstração por contraposição de um enunciado da forma: Se $\alpha$, então $\beta$. Consiste em:
+	\begin{enumerate}
+		\item Encontrar o enunciado contrapositivo: ``Se não $\beta$, então não $\alpha$''
+		\item Demonstrar o enunciado contrapositivo usando o método de demonstração direto.
+	\end{enumerate}
+\end{method}
+
+\begin{exem}\label{exe:DemonstracaoImplicacao3}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Se $n! > (n+1)$, então $n > 2$.
+	\end{center}
+	Agora tem-se que a forma contrapositiva deste enunciado corresponde  usando um pouco da linguagem da lógica proposicional há:
+	\begin{center}
+		$n \leq  2 \Rightarrow n! \leq (n+1)$
+	\end{center}
+	Assim tem-se que,
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $n \leq  2 \Rightarrow n! \leq (n+1)$\\
+			2 & Assuma que  $n \leq 2$ & $n \leq 2$ & $n! \leq (n+1)$\\
+			3 & Fazendo $n = 0, n = 1$ e $n=2$  & $n \leq 2$ & $n! \leq (n+1)$\\
+			& e calculando seu fatorial tem-se: & & \\
+			& $0! = 1$ e $0! < (0+1)$ & & \\
+			& $1! = 1$ e $1! < (1+1)$ & & \\  
+			& $2! = 2$ e $2! < (2+1)$ & & \\ 
+			& Portanto $n! \leq (n+1)$ & $n \leq 2$ e $n! \leq (n+1)$ &\\
+			\hline
+		\end{tabular}
+	\end{table*}
+
+	\begin{proof}
+		Assuma que $n \leq 2$, assim $n = 0, n = 1$ ou $n=2$ calculando os possíveis fatoriais tem-se respectivamente que: $0! = 1$, $1! = 1$ e $2! = 2$, e consequentemente tem-se que $0! \leq (0+1)$, $1! \leq (1+1)$ e $2! \leq (2+1)$, portanto, para $n \leq  2$ se verifica que $n! \leq (n+1)$, desta forma a expressão contrapositiva, ``se $n! > (n+1)$, então $n > 2$.'' É também verdadeira.
+	\end{proof}
+\end{exem}
+
+\begin{exem}\label{exe:DemonstracaoImplicacao4}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Se $x \neq 0$, então $x + c \neq c$.
+	\end{center}
+	Agora tem-se que a forma contrapositiva deste enunciado corresponde  usando um pouco da linguagem da lógica proposicional a seguinte palavra:
+	\begin{center}
+		$x + c = c \Rightarrow x = 0$
+	\end{center}
+	Assim tem-se que,
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $x + c = c \Rightarrow x = 0$\\
+			2 & Suponha que $x + c = c$ & $x + c = c$ & $x = 0$\\
+			3 & Desenvolvendo a igualdade $x + c = c$  & $x + c = c$ & \\
+			& tem-se que $x = 0$ & e $x = 0$ & \\
+			\hline
+		\end{tabular}
+	\end{table*}
+	
+	\begin{proof}
+		Suponha que $x + c = c$, consequentemente tem-se que $x = 0$, e portanto, a contrapositiva ``Se $x \neq 0$, então $x + c \neq c$''. É também verdadeira.
+	\end{proof}
+\end{exem}
+
+\begin{exem}\label{exe:DemonstracaoImplicacao5}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Dado três números $x, y, z \in \mathbb{R}$ com $x > y$. Se $xz \leq yz$, então $z \leq 0$.
+	\end{center}
+	Note que este enunciado pode ser dividido em duas partes, a primeira diz respeito a dados básicos e a segunda o objetivo que se quer demonstrar, pode-se então reescrever tal enunciado em sua forma contrapositiva alterando apenas o objetivo a ser demonstrado da seguinte forma:
+	\begin{center}
+		Dado três números $x, y, z \in \mathbb{R}$ com $x > y$. Se $z > 0$, então $xz > yz$.
+	\end{center}
+	Reescrevendo o objetivo com a linguagem proposicional fica-se com:
+	\begin{center}
+		Dado três números $x, y, z \in \mathbb{R}$ com $x > y$. $z > 0 \Rightarrow xz > yz$.
+	\end{center}
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & $x, y, z \in \mathbb{R}$ com $x > y$ & $z > 0 \Rightarrow xz > yz$\\
+			2 & Suponha que $z > 0$ & $x, y, z \in \mathbb{R}$ com $x > y$ & $xz > yz$\\
+			& & e $z > 0$  &\\
+			3 & Como $z > 0$ multiplicando& $x, y, z \in \mathbb{R}$ com $x > y$ &\\
+			& $x > y$  por $z$ pela & $z > 0$ e $xz > yz$ &\\
+			& monotonicidade da  & &\\
+			& multiplicação tem-se $xz > yz$  & & \\
+			\hline
+		\end{tabular}
+	\end{table*}
+
+	\begin{proof}
+		Suponha que $z > 0$ como $x > y$ pela monotonicidade da multiplicação tem-se $xz > yz$, e portanto, o enunciado: se $xz \leq yz$, então $z \leq 0$ onde $x, y, z \in \mathbb{R}$ e com $x > y$ é também verdadeiro.
+	\end{proof}
+\end{exem}
+
+\section{Demonstração por Absurdo}\label{sec:DemonstracaoAbsurdo}
+
+A principal finalidade do método de demonstração por absurdo (ou redução ao absurdo) e provar que um enunciado $\alpha$ é verdadeiro a partir da prova que o enunciado ``não $\alpha$'' é falso, ou seja, mostrando que o enunciado ``não $\alpha$'' tem como consequente um absurdo, isto é, que ``não $\alpha$'' implica um absurdo, na linguagem da lógica $\neg \alpha \Rightarrow \bot$. A seguir é descrito a metodologia das demonstrações pode redução ao absurdo.
+
+\begin{method}[Redução ao Absurdo]\label{metodo:PorAbsurdo}
+	Um demonstração por redução ao absurdo de um enunciado $\alpha$, consiste em:
+	\begin{enumerate}
+		\item Suponha que não $\alpha$ é uma hipótese verdadeira.
+		\item Usando não $\alpha$ junto com as premissas obtenha uma contradição.
+	\end{enumerate} 
+\end{method}
+
+Com respeito a ideia de tabuleiro de demonstração o mesmo se comporta da seguinte forma ao usar o método de redução ao absurdo, dado um estado $i$ de uma prova cujo o objetivo é demonstrar um enunciado $\alpha$, o estado $i+1$ irá ter a coluna de dados atualizada afim de adicionar ``não $\alpha$'' como um dado, por sua vez, a coluna dos objetivos também será atualizada para ter como objetivo um absurdo $(\bot)$, depois com mais $n$ linhas é desenvolvida a demonstração de $\bot$, o que faz $\bot$ se torne um dado, então na próxima linha os dados ``não $\alpha$'' e $\bot$ são removidos (junto com os dados que estes produziram) da coluna de dados e em seu lugar e adicionado o dado ``$\alpha$'', o tabuleiro a seguir ilustra essa descrição.
+
+\begin{table*}[h]
+	\centering
+	\begin{tabular}{c|l|l|l}
+		\hline
+		\rowcolor{cinzaClaro}
+		Estado & Rascunho & Dados & Objetivo\\
+		\hline
+		$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$\\
+		$i$ & $\cdots$ &$\gamma_1, \cdots, \gamma_n$ & $\alpha$.\\
+		$i+1$ & $\cdots$ & $\gamma_1, \cdots, \gamma_n, \neg \alpha$ & $\bot$.\\
+		$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$\\
+		$i+n+1$ & $\cdots$ & $\gamma_1, \cdots, \gamma_n, \neg \alpha, \bot$ & \\
+		$i+n+2$ & $\cdots$ & $\gamma_1, \cdots, \gamma_n, \alpha$ & \\
+		\hline
+	\end{tabular}
+\end{table*}
+
+\begin{rema}
+	Para resumir ao leitor o método de demonstração por absurdo prova que $\alpha$ é verdadeiro, a partir de uma prova de que $\neg \alpha \Rightarrow \bot$.
+\end{rema}
+
+O leitor atento (e conhecedor de lógica) pode perceber que método de redução ao absurdo nada mais é do que um uso da regra de introdução da negação dos sistemas dedutivos encontrados no estudo da lógica  (ver Seção  \ref{sec:SistemaDedutivo}).
+
+\begin{exem}\label{exe:ProvaAbsurdo1}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Não existe um programa $P$ que sempre vence
+	\end{center}
+	Aqui o tipo de jogo que o programa $P$ joga é irrelevante.
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & Não existe um programa \\
+			& & &$P$ que sempre vence\\ 
+			2 & Suponha que o programa & $P$ & $\bot$\\
+			& $P$ que  sempre vence &  & \\
+			3 & Cria-se duas instâncias & $P, P_1, P_2$ & $\bot$\\
+			& $P_1$ e $P_2$ do programa $P$. & & \\
+			4 & Colocando $P_1$ contra $P_2$ & $\bot, P, P_1, P_2$ & \\
+			& tem-se que se $P_1$ vencer & & \\
+			& $P_2$, então $P_2$ não vence sempre & &\\
+			& o que é um contradição. & & \\
+			& O mesmo ocorre se $P_2$ & & \\
+			& vencer ou se for empate o jogo. & & \\
+			5 & Portanto, Não existe um & Não existe um $P$ &\\
+			& programa $P$ que sempre vence & que sempre vence  &\\
+			\hline
+		\end{tabular}
+	\end{table*}
+
+	\begin{proof}
+		Suponha que o programa $P$  sempre vence, uma vez que existe tal programa o mesmo pode ser instalado em duas máquinas diferentes, ou seja, são criados duas instância $P_1$ e $P_2$ de $P$. Agora colocando $P_1$ para jogar contra $P_2$ existe três possibilidade:
+		\begin{itemize}
+			\item Se $P_1$ vencer significa que $P_2$ não é um programa que sempre vence, o que contradiz a hipótese inicial.
+			\item Se $P_2$ vencer, então $P_2$ não é um programa que sempre vence, o que novamente contradiz a hipótese inicial.
+			\item Se o jogo nunca acabar ou $P_1$ e $P_2$ empatarem tem-se que ambos $P_1$ e $P_2$ não são programas que sempre vencem, o que mais um vez contradiz a hipótese inicial.
+		\end{itemize}
+		Portanto, é impossível existir um programa que sempre vence.
+	\end{proof}
+\end{exem} 
+
+\begin{exem}\label{exe:ProvaAbsurdo2}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		$\sqrt{2}$ não é um número racional.
+	\end{center}
+	Note que o enunciado acima pode ser expresso simplesmente como $\sqrt{2} \notin \mathbb{Q}$.
+	
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $\sqrt{2} \notin \mathbb{Q}$\\
+			2 & Suponha que $\sqrt{2} \in \mathbb{Q}$ & $\sqrt{2} \in \mathbb{Q}$ & $\bot$\\	
+			3 & Assim existe $a, b \in \mathbb{Z}$ & $\sqrt{2} \in \mathbb{Q}, a, b \in \mathbb{Z}$ com $\sqrt{2} = \frac{a}{b}$& $\bot$\\
+			& tal que $\sqrt{2} = \frac{a}{b}$ sendo que & com $b \neq 0$ e $b \neq 0$ com $mdc(a,b) = 1$ & \\
+			& $a$ e $b$ são coprimos& &\\ 
+			4 & Elevando $\sqrt{2} = \frac{a}{b}$ ao & $\sqrt{2} \in \mathbb{Q}, a, b, k \in \mathbb{Z}$ com $\sqrt{2} = \frac{a}{b}$ & $\bot$\\
+			& quadrado tem-se $a^2 = 2b^2$ & e $b \neq 0$ com $mdc(a,b) = 1$ &\\
+			& logo $a$ é par $(a = 2k)$ & e $a = 2k$ &\\
+			5 & Substituindo o valor de $a$ & $\sqrt{2} \in \mathbb{Q}, a, b, k, j \in \mathbb{Z}$ com $\sqrt{2} = \frac{a}{b}$ & $\bot$\\
+			& em $\sqrt{2} = \frac{a}{b}$ pode-se obter & e $b \neq 0$ com $mdc(a,b) = 1$ &\\
+			& que $b^2 = 2k^2$, portanto, & sendo $a = 2k$ e $b = 2j$ &\\
+			& $b$ é par $(b = 2j)$ & & \\
+			6 & Dado que $a$ e $b$ são pares &  $\bot$,  $\sqrt{2} \in \mathbb{Q}, a, b, k, j \in \mathbb{Z}$ com & \\
+			& 2 é um fato comum & $\sqrt{2} = \frac{a}{b}$ e $b \neq 0$, &\\
+			& que contradiz $mdc(a,b) = 1$ & sendo $a = 2k$ e $b = 2j$ & \\	
+			7 & Portanto, $\sqrt{2} \notin \mathbb{Q}$ & $\sqrt{2} \notin \mathbb{Q}$ &\\
+			\hline
+		\end{tabular}
+	\end{table*}
+
+	\begin{proof}
+		Suponha que $\sqrt{2} \in \mathbb{Q}$ assim existe $a, b \in \mathbb{Z}$ tal que $b \neq 0$ e $\sqrt{2} = \frac{a}{b}$, sem perda de generalidade assuma que $a$ e $b$ são coprimos, isto é, que $mdc(a, b) = 1$. Agora tem-se que,
+		\begin{eqnarray*}
+			(\sqrt{2})^2 & = & \Big(\frac{a}{b}\Big)^2\\ 
+			& = & \frac{a^2}{b^2}
+		\end{eqnarray*}
+		Consequentemente, 
+		\begin{eqnarray}\label{eq:EqTrivial1}
+			a^2 = 2b^2
+		\end{eqnarray}
+		e portanto, $a$ é par\footnote{A demonstração desse fato é um bom exercício ao leitor.}, desde que $a$ é par existe $k \in \mathbb{Z}$ tal que $a = 2k$, substituindo tal valor na Equação \ref{eq:EqTrivial1} pode-se verificar que $b^2 = 2k^2$ e assim $b$ também é um número par, ou seja, existe um $j \in \mathbb{Z}$ tal que $b = 2j$. Desde que $a$ e $b$ são pares, então 2 é um fator comum dos dois, o que contradiz a hipótese de ambos serem coprimos, e portanto, $\sqrt{2} \notin \mathbb{Q}$.
+	\end{proof}
+\end{exem}
+
+\section{Demonstração por Casos}\label{sec:DemonstracaoPorCasos}
+
+Realizar uma demonstração por casos, consiste em demonstrar cobrindo todos os casos possíveis que as premissas $\alpha_i$ em um enunciado $\beta$ podem assumir, formalmente a metodologia da demonstração por caso é como se segue.
+
+\begin{method}[Por casos]\label{metodo:PorCasos}
+	Um provar por caso, consiste em provar um enunciado da forma: Se $\alpha_1$ ou $\cdots$ ou $\alpha_n$, então $\beta$. Para isso é realizado os seguintes passos:
+	\begin{itemize}
+		\item Supor $\alpha_1$ (e apenas ela) verdadeira, e demonstrar $\beta$.
+		
+		$\vdots$
+		
+		\item Supor $\alpha_n$ (e apenas ela) verdadeira, e demonstrar $\beta$.
+	\end{itemize}
+\end{method} 
+
+Um leitor atento pode notar que o método de prova por caso consiste em provar uma conjunção da forma: $\displaystyle \bigwedge_{i=1}^n(\alpha_i \Rightarrow \beta)$. Agora para provar um enunciado que consiste de um conjunção usando a noção do tabuleiro é necessário que seja realizada a prova de cada componente da conjunção separadamente, sendo que a cada demonstração realizada a parte da conjunção demonstrada é ganha como um dado no tabuleiro, quando todos os componentes da conjunção são demonstrados então a própria conjunção é adicionada aos dados, e seu componentes são removidos.
+
+\begin{exem}\label{exe:ProvaCaso1}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Seja $x \in \mathbb{N}$ tem-se que $x$ e $x^2$ tem a mesma paridade.
+	\end{center}
+	Note que são necessário realizar a demonstração para os dois casos de paridade possível, isto é,  o caso de $x$ ser par, e o caso de $x$ ser impar. Uma vez que, a informação seja $x \in \mathbb{N}$ é apenas um dado, o real objetivo é provar que $x$ e $x^2$ tem a mesma paridade, ou seja, o objetivo é demonstrar que: se $x$ é par, então $x^2$ é par, e se $x$ é impar, então $x^2$ é impar, ou seja, o objetivo é provar:
+	\begin{center}
+		 $(x = 2i \Rightarrow$ $x^2 = 2j) \land (x = 2k + 1 \Rightarrow$ $x^2 = 2l + 1)$ com $i, j, k, l \in \mathbb{N}$
+	\end{center}
+	
+	tabuleiro a seguir descreve o raciocínio de prova. 
+	
+	\begin{table*}[h]
+		\centering
+		\scriptsize
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			& & & $(x = 2i \Rightarrow$ $x^2 = 2j)$\\ 
+			1& & $x \in \mathbb{N}$ & $\land (x = 2k + 1 \Rightarrow$ $x^2 = 2l + 1)$\\
+			& & & com $i, j, k, l \in \mathbb{N}$\\
+			% -----------------------------------------
+			2 & Suponha que $x = 2i$ & $x, i,j \in \mathbb{N}$ & $(x = 2k + 1 \Rightarrow$ $x^2 = 2l + 1)$\\ 
+			& com $i \in \mathbb{N}$, logo $x^2 = 2(2i^2)$ & $(x = 2i \Rightarrow$ $x^2 = 2j)$ & com $i, j, k, l \in \mathbb{N}$\\
+			& fazendo $j = 2i^2$ tem-se $x^2 = 2j$ & &\\
+			% -----------------------------------------
+			3 & Suponha que $x = 2k + 1$ & $x, i,j, k, l \in \mathbb{N}$ &\\
+			& com $k \in \mathbb{N}$, logo $x^2 = 2 (2k^2 + k) + 1$ & $(x = 2i \Rightarrow$ $x^2 = 2j) \land$ & \\
+			& fazendo $l = (2k^2 + k)$ tem-se $x^2 = 2l+1$ & $(x = 2k + 1 \Rightarrow$ $x^2 = 2l + 1)$ &\\
+			\hline
+		\end{tabular}
+	\end{table*} 
+	\begin{proof}
+		Assuma sem perda de generalidade\footnote{A demonstração seria similar se $x$ fosse inteiro.} que $x \in \mathbb{N}$,  agora tem-se que analisar dois casos:
+		\begin{enumerate}
+			\item Suponha que $x$ é par, logo existe um $i \in \mathbb{N}$ tal que $x = 2i$, calculando então $x^2$ tem-se que $x^2 = 2(2i^2)$, uma vez que potenciação e multiplicação são fechadas sobre os naturais, tem-se que existe um $j \in \mathbb{N}$ tal que $j = 2i^2$, consequentemente, $x^2 = 2j$, e portanto, $x^2$ é par.
+			\item Suponha que $x$ é impar, logo existe um $k \in \mathbb{N}$ tal que $x = 2k + 1$, calculando então $x^2$ tem-se que $x^2 = 2(2k^2 + k) + 1$, uma vez que potenciação e multiplicação são fechadas sobre os naturais, tem-se que existe um $l \in \mathbb{N}$ tal que $l = 2k^2 + k$, consequentemente, $x^2 = 2l + 1$, e portanto, $x^2$ é impar.
+		\end{enumerate}
+		Agora pelos casos (1) e (2) pode-se afirma que $x$ e $x^2$ tem a mesma paridade. 
+	\end{proof}
+\end{exem}
+
+\begin{rema}
+	Obviamente os estados $2$ e $3$ do exemplo anterior poderiam ter sido quebrados em vários estados, uma vez que, ambos são provas diretas de implicações, isto não foi feito para reduzir a escrita e por acreditar que o leitor já tenha o amadurecimento matemático suficiente para por si só conseguir ``quebrar'' tais estados, caso queira.
+\end{rema}
+
+
+\begin{exem}\label{exe:ProvaCaso2}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Seja $x \in \mathbb{Z}$ tem-se que $x \leq x^2$.
+	\end{center}
+	Note que são necessário realizar a demonstração para os três casos possíveis, isto é, os casos de $x = 0$, $x \leq -1$ e $x \geq 1$, assim o que deve ser demonstrado de fato é o enunciado: 
+	\begin{center}
+		Seja $x \in \mathbb{Z}$, se $(x = 0$ ou $x \leq -1$ ou $x \geq 1)$, então $x \leq x^2$.
+	\end{center}
+	Reescrevendo tal enunciado (omitindo $x \in \mathbb{Z}$) como uma proposição tem-se:
+	\begin{center}
+		$(x = 0 \lor x \leq -1 \lor x \geq 1) \Rightarrow x \leq x^2$.
+	\end{center}
+	E esta proposição é equivalente a:
+	\begin{center}
+		$(x = 0 \Rightarrow x \leq x^2) \land (x \leq -1 \Rightarrow x \leq x^2)  \land (x \geq 1 \Rightarrow x \leq x^2)$.
+	\end{center}
+	O tabuleiro a seguir descreve o raciocínio de prova. 
+	
+	\begin{table*}[h]
+		\centering
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & $x \in \mathbb{Z}$ & $(x = 0 \Rightarrow x \leq x^2) \land$\\ 
+			& & & $(x \leq -1 \Rightarrow x \leq x^2)  \land$ \\
+			& & & $(x \geq 1 \Rightarrow x \leq x^2)$\\
+			2 & Supondo que $x = 0$, & $x \in \mathbb{Z}, (x = 0 \Rightarrow x \leq x^2)$ & $(x \leq -1 \Rightarrow x \leq x^2)  \land$ \\
+			& tem-se que $x^2 = 0^2 = 0$ & & $(x \geq 1 \Rightarrow x \leq x^2)$\\
+			& E portanto, $x \leq x^2$ & &\\
+			3 & Agora assuma que $x \leq -1$ & $x \in \mathbb{Z}, (x = 0 \Rightarrow x \leq x^2),$ & $(x \geq 1 \Rightarrow x \leq x^2)$\\
+			& logo $x^2 > 0$, e portanto, & $(x \leq -1 \Rightarrow x \leq x^2)$ & \\
+			& $x \leq x^2$ & &\\
+			4 & Assumindo $x \geq 1$ tem-se & $x \in \mathbb{Z}, (x = 0 \Rightarrow x \leq x^2),$ &\\
+			& multiplicando os dois lados&  $(x \leq -1 \Rightarrow x \leq x^2),$ & \\
+			& por $x$ tem-se que & $(x \geq 1 \Rightarrow x \leq x^2)$ & \\
+			& $x \cdot x \geq 1 \cdot x$, logo & &\\
+			& $x \leq x^2$ & & \\
+			\hline
+		\end{tabular}
+	\end{table*} 
+
+	\begin{proof}
+		Dado um $x \in \mathbb{Z}$ tem-se que os seguintes casos:
+		\begin{enumerate}
+			\item Assumindo que $x = 0$, tem-se trivialmente que $x^2 = 0^2 = 0$, e portanto, $x \leq x^2$.
+			\item Suponha $x \leq -1$, assim pelas propriedades da multiplicação nos inteiros que $x^2 > 0$, e consequentemente $x \leq x^2$.
+			\item Assumindo que $x \geq 1$, e multiplicando os dois lados da inequação por $x$ tem-se que $x^2 \geq x$, e portanto, pode-se concluir que $x \leq x^2$.
+		\end{enumerate}
+		Pelos casos (1), (2) e (3) pode-se concluir que dado um número inteiro $x$ tem-se sempre que $x \leq x^2$. 
+	\end{proof}
+\end{exem}
+
+\begin{rema}
+	Os estados $2, 3$ e $4$ do Exemplo \ref{exe:ProvaCaso2} poderiam ter sido quebrados em vários estados, uma vez que, todos são na verdade provas diretas de implicações, como antes isso não foi feito, ficando essa ``quebra'' em provas com exercício ao leitor.
+\end{rema}
+
+\section{Demonstração de Generalizações}\label{sec:DemonstracaoGeneralizacao}
+
+Antes de falar sobre o método usado para demonstrar generalizações deve-se primeiro reforçar ao leitor o que é são generalizações. Uma generalização é qualquer sentença que contenha em sua formação expressões das formas: 
+\begin{itemize}
+	\item[(a)] Para todo \underline{\ \ \ \ \ \ \ \ \ \ \ \ \ }.
+	\item[(b)] Para cada \underline{\ \ \ \ \ \ \ \ \ \ \ \ \ }.
+	\item[(c)] Para qualquer \underline{\ \ \ \ \ \ \ \ \ \ \ \ \ }.
+\end{itemize}
+Agora que o leitor está a par do que é uma generalização, pode-se prosseguir o texto deste manuscrito apresentando formalmente o método de demonstração para generalizações.
+
+\begin{rema}
+	Neste texto sempre que possível será usado a escrita ``para todo'' para construir as generalizações.
+\end{rema}
+
+\begin{method}[Prova de generalização]
+	Para provar uma generalização da forma: ``para todo $x$, tem-se $P(x)$''. Deve-se:
+	\begin{enumerate}
+		\item Super que a variável da generalização $x$ assume como valor um elemento qualquer no universo do discurso de que trata a  generalização.
+		\item Provar que o enunciado (ou propriedade) $P(x)$ é verdadeiro, usando as propriedades disponível de forma genérica para os elementos do universo do discurso.
+	\end{enumerate}
+\end{method}
+
+Note que o método de demonstração acima afirma que, para justificar a veracidade de uma generalização basta que seja escolhido um elemento genérico qualquer $x$ do universo do discurso e a partir desse elemento genérico apresentar a justificativa da sentença $P(x)$.
+
+Em relação a demonstração de generalização o tabuleiro apresenta o seguinte comportamento, se um estado $i$ o objetivo é demonstrar uma generalização em universo $\mathbb{U}$ qualquer, isto é, o objetivo é uma sentença da forma $(\forall x \in \mathbb{U})[P(x)]$, então na linha $i+1$ os dados são atualizado com a adiciona de um elemento genérico $x \in \mathbb{U}$, além disso, os objetivos também são atualizado para ter como alvo o $P(x)$. Em seguida nas próxima $n$ linhas do tabuleiro deve ser desenvolvida a prova da propriedade $P(x)$, afim de que, na linha $i+n+1$ sejam atualizados os dados com a adição de $(\forall x \in \mathbb{U})[P(x)]$ e os objetivos serão atualizados com a remoção de $P(x)$, o tabuleiro a seguir apresenta este comportamento.
+
+\begin{table*}[h]
+	\centering
+	\begin{tabular}{c|c|c|c}
+		\hline
+		\rowcolor{cinzaClaro}
+		Estado & Rascunho & Dados & Objetivo\\
+		\hline
+		$i$ & $\cdots$ & $\cdots$ & $(\forall x \in \mathbb{U})[P(x)]$\\
+		$i+1$ & $\cdots$ & $x \in \mathbb{U}$ & $P(x)$\\
+		$\vdots$ & $\vdots$ & $\vdots$ & $P(x)$\\
+		$i+n+1$ & $\vdots$ & $(\forall x \in \mathbb{U})[P(x)]$ & \\
+		\hline 
+	\end{tabular}
+\end{table*}
+
+\begin{exem}\label{exe:ProvaGen1}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Para todo $x \in \{4n \mid n \in \mathbb{N} \}$ tem-se que $x$ é par.
+	\end{center}
+	Utilizando um pouco da linguagem da lógica de primeira ordem pode-se reescrever esse enunciado como sendo:
+	\begin{center}
+		$(\forall x \in \{4n \mid n \in \mathbb{N} \})[x = 2k \mbox{ com } k \in \mathbb{N}]$
+	\end{center}
+	Assim tem-se:
+	
+	\begin{table*}[h]
+		\centering
+		\scriptsize
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $(\forall x \in \{4n \mid n \in \mathbb{N} \})[x = 2k \mbox{ com } k \in \mathbb{N}]$\\
+			2 & Dado um $ x \in \{4n \mid n \in \mathbb{N} \}$ & $n \in \mathbb{N}, x = 4n$ & $x = 2k \mbox{ com } k \in \mathbb{N}$\\
+			 & assim $x = 4n$ com $n \in \mathbb{N}$ & & \\
+			 3 & Desenvolvendo $4n$ tem-se & $n, j \in \mathbb{N}, k = 2n$ &\\
+			 & $4n = 2(2n)$, assim existe & $x = 2k$ & \\
+			 & $k \in \mathbb{N}$ tal que $k = 2n$ & &\\
+			 4 & Logo todo $x = 4n$ é par & $(\forall x \in \{4n \mid n \in \mathbb{N} \})$ & \\
+			 & & $[x = 2k \mbox{ com } k \in \mathbb{N}]$&\\
+			\hline 
+		\end{tabular}
+	\end{table*}
+
+	\begin{proof}
+		Assuma que $ x \in \{4n \mid n \in \mathbb{N} \}$, logo $x = 4n$ para algum $n \in \mathbb{N}$, mas pelas propriedades da multiplicação nos naturais tem-se que $4n = 2(2n)$, logo existe um $k \in \mathbb{N}$ tal que $k = 2n$, consequentemente, $x = 2k$, e portanto, $x$ é par. Logo todo múltiplo de 4 é par.
+	\end{proof}
+\end{exem}
+
+\begin{exem}\label{exe:ProvaGen2}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Para todo $X, Y \subseteq \mathbb{U}$ se $X \neq \emptyset$, então $X \cup Y \neq \emptyset$.
+	\end{center}
+	Utilizando um pouco da linguagem da lógica de primeira ordem pode-se reescrever esse enunciado como sendo:
+	\begin{center}
+		$(\forall X, Y \subseteq \mathbb{U})[X \neq \emptyset \Rightarrow X \cup Y \neq \emptyset]$
+	\end{center}
+	Assim tem-se:
+	
+	\begin{table*}[h]
+		\centering
+		\scriptsize
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			1 & & & $(\forall X, Y \subseteq \mathbb{U})[X \neq \emptyset \Rightarrow X \cup Y \neq \emptyset]$\\
+			2 & Dado $X, Y \subseteq \mathbb{U}$ & $X, Y \subseteq \mathbb{U},$ & $X \neq \emptyset \Rightarrow X \cup Y \neq \emptyset$\\
+			3 & Assumindo $X \neq \emptyset$ & $X, Y \subseteq \mathbb{U}, X \neq \emptyset $ & $X \cup Y \neq \emptyset$\\
+			4 & Como existe $x \in X$ & $X, Y \subseteq \mathbb{U},$ & $X \cup Y \neq \emptyset$\\
+			& tem-se que $x \in X \cup Y$ & $X \neq \emptyset \Rightarrow X \cup Y \neq \emptyset$ &\\
+			& logo $X \cup Y = \emptyset$ & &\\
+			5 & Consequentemente &$(\forall X, Y \subseteq \mathbb{U})[X \neq \emptyset \Rightarrow X \cup Y \neq \emptyset]$ & \\
+			& a união de $X \neq \emptyset$ e um $Y$ & &\\
+			& qualquer é diferente de $\emptyset$ & & \\
+			\hline 
+		\end{tabular}
+	\end{table*}
+	
+	\begin{proof}
+		Dado dois subconjuntos $X$ e $Y$  do universo $\mathbb{U}$, assuma que $X \neq \emptyset$, assim existe pelo menos um $x \in X$, e assim por definição, $x \in X \cup Y$, consequentemente, $X \cup Y \neq \emptyset$. Logo para todo $X, Y \subseteq$, sempre que $X \neq \emptyset$, então tem-se que $X \cup Y \neq \emptyset$.
+	\end{proof}
+\end{exem}
+
+\begin{rema}
+	O leitor pode perceber que o método de demonstração de generalização, consiste da aplicação da regra de introdução do quantificador universal, em domínios foram do sistema de dedução natural.
+\end{rema}
+
+Um erro que muitos iniciantes frequentemente cometem ao tentar provar enunciados de generalização da forma $(\forall x \in \mathbb{U})[P(x)]$, é utilizar uma (ou mais) propriedade(s) de um elemento genérico $x$  para provar $P(x)$, sendo esta(s) propriedade(s) usada(s) não é (são) compartilha(s) por todos os elementos de $\mathbb{U}$, para mais detalhes sobre isso vê \cite{velleman2019comProvar}. 
+
+\section{Demonstração de Existência}\label{sec:DemonstrandoExistencia}
+
+Antes de falar sobre o método de demonstração existencial deve-se primeiro reforçar ao leitor o que é um enunciado existencial. Um enunciado existencial é qualquer sentença em que contenha em sua formação expressões das formas:
+\begin{itemize}
+	\item[(a)] Existe um(a) $\underline{\ \ \ \ \ \ \ \ \ \ \ \ }$.
+	\item[(b)] Há um(a) $\underline{\ \ \ \ \ \ \ \ \ \ \ \ }$.
+\end{itemize} 
+
+Para demonstrar (provar) a existência de um objeto com um determinada propriedade, ou seja, provar que um certo objeto $x$ satisfaz uma propriedade $P$,  denotado genericamente como $(\exists x)[P(x)]$, deve-se mostrar um objeto que possua esta propriedade e provar que, de fato, ele possui esta propriedade. A seguir é definido formalmente a estratégia de provar a existência.
+
+\begin{method}[existencialização]
+	Para provar um enunciado que pode ser expresso da forma: ``Existe um $x$ tal que $P(x)$''. Deve-se fazer o seguinte:
+	\begin{enumerate}
+		\item Exibir um elemento específico $a$ pertencente ao universo do discurso do enunciado.
+		\item Provar que o enunciado $P(x)$ é verdadeiro quando a meta variável $x$ é instanciada com o valor $a$.
+	\end{enumerate}
+\end{method}
+
+Em relação ao tabuleiro as provas de existência apresentam o seguinte comportamento, se um estado $i$ o objetivo é demonstrar uma generalização em universo $\mathbb{U}$ qualquer, isto é, o objetivo é uma sentença da forma $(\exists x \in \mathbb{U})[P(x)]$, então na linha $i+1$ os dados são atualizado para que seja adicionado um elemento específico $a \in \mathbb{U}$, além disso, os objetivos também são atualizado para ter como alvo o $P(a)$. Em seguida nos próximos $n$ estados deve ser desenvolvida a prova de que a propriedade $P(a)$ é verdadeiro, afim de que, na linha $i+n+1$ sejam atualizadas as colunas de dados com a adição de $(\exists x \in \mathbb{U})[P(x)]$ e os objetivos serão atualizados com a remoção do objetivo $P(a)$, o tabuleiro a seguir apresenta este comportamento.
+
+\begin{table*}[h]
+	\centering
+	\begin{tabular}{c|c|c|c}
+		\hline
+		\rowcolor{cinzaClaro}
+		Estado & Rascunho & Dados & Objetivo\\
+		\hline
+		$i$ & $\cdots$ & $\cdots$ & $(\exists x \in \mathbb{U})[P(x)]$\\
+		$i+1$ & $\cdots$ & $a$ & $P(a)$\\
+		$\vdots$ & $\vdots$ & $\vdots$ & $P(a)$\\
+		$i+n+1$ & $\vdots$ & $(\exists x \in \mathbb{U})[P(x)]$ & \\
+		\hline 
+	\end{tabular}
+\end{table*}
+
+\begin{exem}\label{exe:ProvaExi1}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Existe um número natural $x$ tal que $x$ é igual ao seu quadrado.
+	\end{center}
+	Utilizando um pouco da linguagem da lógica de primeira ordem pode-se reescrever esse enunciado como sendo:
+	\begin{center}
+		$(\exists x \in \mathbb{N})[x = x^2]$
+	\end{center}
+	Assim tem-se:
+	\begin{table*}[h]
+		\centering
+		\scriptsize
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			$1$ &  &  & $(\exists x \in \mathbb{N})[x = x^2]$\\
+			$2$ & Fazendo $x = 1$ & $x = 1$ & $1 = 1^2$\\
+			$3$ & Agora note que $x^2 = x \cdot x = 1 \cdot 1 = 1$, & $x = 1, 1^2 = 1$ &\\ 
+			& consequentemente, $1 = 1^2$ &  &\\
+			$4$ & Portanto, uma vez que $1 \in \mathbb{N}$ &$x = 1, 1^2 = 1, (\exists x \in \mathbb{N})[x = x^2]$  & \\
+			& pode-se concluir que, $\exists x \in \mathbb{N}$ tal que $x = x^2$ & &\\
+			\hline 
+		\end{tabular}
+	\end{table*}
+    
+    Convertendo, o rascunho do tabuleiro em uma demonstração tem-se:
+     
+	\begin{proof}
+		Considere o número natural $1$, agora perceba que $1^2 = 1 \cdot 1 = 1$, portanto, um vez que $1 \in \mathbb{N}$ pode-se concluir que, existe um número natural $x$ tal que $x = x^2$.
+	\end{proof}
+\end{exem}
+
+\begin{rema}
+	O leitor deve perceber que o número $1$ não é o único natural que serviria aos propósitos da demonstração do exemplo anterior, de fato, o número $0$ também poderia ser utilizado sem qualquer prejuízo a prova.
+\end{rema}
+
+\begin{exem}\label{exe:ProvaExi2}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Existe um conjunto $X$ tal que para todo conjunto $Y$ tem-se que $X \cup Y = Y$.
+	\end{center}
+	Utilizando um pouco da linguagem da lógica de primeira ordem pode-se reescrever esse enunciado como sendo:
+	\begin{center}
+		$(\exists X)[(\forall Y)[X \cup Y = Y]]$
+	\end{center}
+	Assim tem-se:
+	\begin{table*}[h]
+		\centering
+		\scriptsize
+		\begin{tabular}{c|c|c|c}
+			\hline
+			\rowcolor{cinzaClaro}
+			Estado & Rascunho & Dados & Objetivo\\
+			\hline
+			$1$ &  &  & $(\exists X)[(\forall Y)[X \cup Y = Y]]$\\
+			$2$ & Considere $X = \emptyset$ & $X = \emptyset$ & $(\forall Y)[\emptyset \cup Y = Y]$\\ 
+			$3$ & Dado um conjunto qualquer $Y$ & $X = \emptyset$ e $Y$ é um conjunto & $\emptyset \cup Y = Y$\\
+			$4$ & Sem perda de generalidade tem-se & $X = \emptyset$ e $Y$ é um conjunto e & $\emptyset \cup Y = Y$\\
+			& que $y \in Y$ é tal que $y \in (\emptyset \cup Y)$ & $y \in Y$ &\\
+			$5$ & Por outro lado, não há elementos no $\emptyset$, & $X = \emptyset$ e $Y$ é um conjunto e & \\
+			& portanto, cada $z \in (\emptyset \cup Y)$ é tal que $z \in Y$ & $\emptyset \cup Y = Y$ &\\
+			& assim é claro que $\emptyset \cup Y = Y$ & &\\
+			$6$ & Como $Y$ é um conjunto qualquer & $X = \emptyset$ e $Y$ e &\\
+			& pode-se concluir que $(\forall Y)[\emptyset \cup Y = Y]$ & $(\forall Y)[\emptyset \cup Y = Y]$ &\\
+			7 & Uma vez que $\emptyset$ é um conjunto & $X = \emptyset$ e $Y$ e &\\
+			& pode-se concluir que $(\exists X)[(\forall Y)[X \cup Y = Y]]$ & $(\exists X)[(\forall Y)[X \cup Y = Y]]$ & \\
+			\hline 
+		\end{tabular}
+	\end{table*}
+
+	Convertendo a tabuleiro em um demonstração tem-se:
+	\begin{proof}
+		Considere que $X = \emptyset$, assim dado qualquer conjunto $Y$ tem-se que para todo $y \in Y$ que $y \in (X \cup Y)$, além disso, um vez que $X$ não possui nenhum elemento tem-se que todos os elementos em $X \cup$ são exatamente os elementos em $Y$, consequentemente,  $X \cup Y = Y$, e portanto, pode-se de fato enunciar que existe um conjunto $X$ tal que para todo conjunto $Y$ tem-se que $X \cup Y = Y$.
+	\end{proof}
+\end{exem}
+
+Agora aproveitando este momento no manuscrito em que o foco é falar sobre provas de existência, será feita uma pausa para falar um pouco sobre provas e enunciados de unicidade. Em primeiro lugar um enunciado de unicidade, é um tipo particular de enunciado existencial, que pode ser escrito (em português) como se segue:
+\begin{itemize}
+	\item[(a)] Existe um(a) único(a) $\underline{\ \ \ \ \ \ \ \ \ \ \ \ }$.
+	\item[(b)] Há apenas um(a) $\underline{\ \ \ \ \ \ \ \ \ \ \ \ }$.
+\end{itemize} 
+
+Note que os enunciados de unicidades são sentenças que afirmam que só há um indivíduo no universo do discurso que satisfaz certa(s) propriedade(s).
+
+\begin{rema}
+	Matematicamente o quantificador existência de unicidade é simbolicamente representado pela notação $\exists!$.  
+\end{rema}
+
+\begin{method}[Demonstração de unicidade]
+	Para provar um enunciado de unicidade da forma: ``Existe um único $x$ tal que $P(x)$''. Deve-se fazer o seguinte:
+	\begin{enumerate}
+		\item Provar que existe um $x$ tal que $P(x)$ é satisfeita.
+		\item Provar que quando existem $x$ e $x'$ tal que $P(x)$ e $P(x')$ são satisfeitas tem-se $x = y$.
+	\end{enumerate}
+\end{method}
+
+
+\begin{exem}\label{exe:ProvaExi3}
+	É requerido provar o seguinte enunciado:
+	\begin{center}
+		Existe um único $x \in \mathbb{N}$ tal que para todo $y \in \mathbb{N}$ tem-se que $x + y = y$.
+	\end{center}
+	Utilizando um pouco da linguagem da lógica de primeira ordem pode-se reescrever esse enunciado como sendo:
+	\begin{center}
+		$(\exists! x \in \mathbb{N})[(\forall y \in \mathbb{N})[x + y = y]]$
+	\end{center}
+	Aqui será deixada a construção do tabuleiro por conta do leitor, assim a sentença acima é demonstrada como se segue:
+	\begin{proof}
+		Para qualquer que seja $y \in \mathbb{N}$ tem-se que $y + 0 = 0 + y = y$, consequentemente, existe $x \in \mathbb{N}$ tal que $x + y = y$, sendo este $x = 0$. Agora assuma que exista outro elemento $x' \in \mathbb{N}$ com $x' \neq x$ tal que para todo $y$ tem-se que $x' + y = y + x' = y$. Mas disso segue que:
+		$$x \stackrel{Hip.}{=} x + x' = x'$$
+		mas isso é um contradição da hipótese, e portanto, $x = 0$ é o único número natural que para todo $y \in \mathbb{N}$ tem-se que $x + y = y$.
+	\end{proof}
+\end{exem}
+
+\begin{rema}
+	O uso do tabuleiro nas demonstrações foi usado apenas como uma forma de melhorar a interpretação do leitor, e para desenvolver um raciocínio similar ao empregado pelo provador de teoremas Coq \cite{coq2013}. No decorrer deste manuscrito, o tabuleiro não será mais apresentado durante as demonstrações.
+\end{rema}
+
+%\section{A suficiência e a necessidade}\label{sec:SuficienciaNecessidade}
+
+%Na matemática e também na área de especificações e verificações formais de \textit{software} não é raro ser exigido a demonstração de certa propriedades através de enunciados da forma, ``$\alpha$ se e somente se $\beta$'', onde $\alpha$ e $\beta$ são frase declarativas de em um certo discurso.
+
+\section{Questionário}
+
+\begin{exercise}\label{exerc:Demonstracao1}
+	Demonstre ou refute\footnote{Refutar um enunciado consiste em mostrar que o mesmo é falso.} os seguintes enunciados.
+\end{exercise}
+
+\begin{enumerate}
+	\item Dado $x, y \in \mathbb{Z}$ demonstre que: Se $x$ é par e $y$ é impar, então $x + y$ é impar.
+	\item Dado $x, y \in \mathbb{Z}$ demonstre que: Se $x$ é par e $y$ é impar, então $xy$ é par.
+	\item O conjunto dos números primos é finito.
+	\item Dado $X \subseteq Z$ e $Y \cap Z = \emptyset$ prove que: Se $x \in X$, então $x \notin Y$.
+	\item Seja $(X \ominus Y) \cap Z = \emptyset$ e $x \in X$ prove que: Se $x \in Z$, então $x \in Y$.
+	\item Demonstre por redução ao absurdo que: Se $(X \cap Z) \subseteq Y$ e $x \in Z$, então $x \notin (X \ominus Y)$.
+	\item Dado $x, y \in \mathbb{R}$ prove que: Se $x < y < 0$, então $x^2 > y^2$.
+	\item Dado $x, y \in \mathbb{R}$ prove que: Se $0 < x < y$,  então $\displaystyle \frac{1}{y} < \frac{1}{x}$.
+	\item Dado $x \in \mathbb{R}$ verifique que: Se $x^5 > x$, então $x^7 > x$.
+	\item Dado $(X \ominus Y) \subseteq (W \cap Z)$ e $x \in X$, demonstre que: Se $x \notin Z$, então $x \in Y$.
+\end{enumerate}
+
+\begin{exercise}\label{exerc:Demonstracao2}
+	Assuma que $x, y, z, k_1, k_2 \in \mathbb{Z}$ demonstre os seguintes enunciados.
+\end{exercise}
+
+\begin{enumerate}
+	\item Se $x$ é um divisor de $y$, então $x$ é um divisor de $yz$.  
+	\item Se $x$ é um divisor de $y$, então $x$ é um divisor de $-y$ e $-x$ é um divisor de $y$.
+	\item Se $x$ é divisor de $y$ e $x$ é divisor $z$, então $x$ é divisor $y + z$.
+	\item Se $x$ é divisor de $y$ e $x$ é divisor $z$, então $x$ é divisor $yk_1 + zk_2$.
+	\item Se $x$ é um divisor de $y$ e $y \neq 0$, então $x \leq y$. 
+	\item Se $z \neq 0$ e $x$ é um divisor de $y$, então $xz$ é um divisor $yz$.
+	\item Se $xz$ é um divisor $yz$, então $x$ é um divisor de $y$ e $z \neq 0$.
+	\item Se $x$ é divisor de $z$ e $y$ é divisor $z$, então $xy$ é um divisor de $z$.
+	\item Se $x + z = 0$ e $z \neq 0$, então $x = -z$. 
+	\item Se $x > 1$ e $x$ não é um número primo,  então $2^x - 1$ não é primo.
+\end{enumerate}
+
+\begin{exercise}\label{exerc:Demonstracao3}
+	Demonstre os enunciados a seguir.
+\end{exercise}
+
+\begin{enumerate}
+	\item Dado $x, y \in \mathbb{R}$. Se $\displaystyle x < \frac{1}{x} < y < \frac{1}{y}$, então $x < -1$.
+	\item Dado $x, y \in \mathbb{R}$. Se $x^2y = 2x + y$, então se $y \neq 0$, então $x \neq 0$.
+	\item Dado $x, y \in \mathbb{R}$. Se $x \neq 0$, então se $\displaystyle y = \frac{2x^2+2y}{x^2+2}$, então $y = 3$.
+	\item Dado $X \subseteq Y$ com $x \in X$ e $x \notin (Y \ominus Z)$. Tem-se que $x \in Z$ 
+	\item Qualquer conjunto $X$ é um discurso $\mathbb{U}$ é tal que $X \subseteq \mathbb{U}$.
+\end{enumerate}
+
+\begin{exercise}\label{exerc:Demonstracao4}
+	Considere o seguinte enunciado: Dado $X \subseteq Z$ e $Y \subseteq Z$ e $x \in X$ tem-se que $x \in Y$.
+\end{exercise}
+
+\begin{enumerate}
+	\item O que há de errado na demonstração a seguir?
+	\begin{proof}
+		Suponha que $x \notin Y$, desde que $x \in X$ e $X \subseteq Z$ e $x \in Z$, uma vez que, $x \notin Y$ e $Y \subseteq Z$. Mas isto é uma contradição da hipótese, e portanto, $x \in Y$.
+	\end{proof}
+	\item Apresente um contra-exemplo que mostre que o enunciado é falso.
+\end{enumerate}
+
+\begin{exercise}\label{exerc:Demonstracao5}
+	Considere o seguinte enunciado: Dado $x, y \in \mathbb{R}$ com $x + y = 10$ tem-se que $x \neq 6$ e $y \neq 9$.
+\end{exercise}
+
+\begin{enumerate}
+	\item O que há de errado na demonstração a seguir?
+	\begin{proof}
+		Suponha $x, y \in \mathbb{R}$ com $x + y = 10$ , agora assuma que $x = 6$ e $y = 9$, logo tem-se que $x+y = 15$, mas isto é uma contradição da hipótese, e portanto, $x \neq 6$ e $y \neq 9$.
+	\end{proof}
+	\item Apresente um contra-exemplo que mostre que o enunciado é falso.
+\end{enumerate}
+
+\begin{exercise}\label{exerc:Demosntracao6}
+	Prove ou refute os enunciados a seguir.
+\end{exercise}
+
+\begin{enumerate}
+	\item Dado $x \in \mathbb{R}$ se $x \neq 1$, então existe um $y \in \mathbb{R}$ tal que $\displaystyle x = \frac{y+1}{y - 2}$.
+	\item Se  existe um $y \in \mathbb{R}$ tal que $\displaystyle x = \frac{y+1}{y - 2}$, então $x \neq 1$.
+	\item Para todo $x \in \mathbb{R}$ se $x > 2$, então existe um $y \in \mathbb{R}$ tal que $\displaystyle y + \frac{1}{y} = x$.
+	\item Para todo $x, y \in \mathbb{R}$, existe um $z \in \mathbb{R}$ tal que $x + z = y - z$.
+	\item Para todo $x \in \mathbb{R}$, existe um $y \in \mathbb{R}$ tal que, para todo $z \in \mathbb{R}$ tem-se a seguinte igualdade $yz = (x + z)^2 - (x^2 + z^2)$.
+	\item Para todo $x \in \mathbb{Z}$ existe um único $y \in \mathbb{Z}$ tal que $x + y = 0$.
+\end{enumerate}

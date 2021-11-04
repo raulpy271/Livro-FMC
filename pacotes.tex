@@ -1,0 +1,164 @@
+% ===================================================
+% Pacotes MUITO importantes utilizados
+% ===================================================
+
+% Usado na construção do índice
+\usepackage{makeidx} 
+\makeindex
+
+% Pacotes de Matemática
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{wasysym}
+
+% ===================================================
+% Pacote para e configurações para desenhar
+% ===================================================
+
+% Pacote de desenhos
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+
+\usetikzlibrary{positioning, calc, chains, fit, shapes, automata, trees}
+
+% Pacote para desenhar árvores
+\usepackage{forest}
+
+% ===================================================
+% Pacote para caixas de texto
+% ===================================================
+% Pacote usado para inserir caixinha de texto com sombra (shadowbox)
+\usepackage{fancybox}
+
+% ===================================================
+% Pacote para os diagramas de Fitch
+% ===================================================
+\usepackage{fitchPS}
+
+% ===================================================
+% Pacote para multi-linhas nas tabelas
+% ===================================================
+\usepackage{multirow}
+
+% ===================================================
+% Pacote para introduzir epígrafes nos capítulos 
+% ===================================================
+\usepackage{epigraph}
+
+% ===================================================
+% Pacote para o not em operadres de relação
+% ===================================================
+\usepackage{centernot}
+
+
+% ===================================================
+% Pacotes e configurações básicas
+% ===================================================
+
+% Pacote para trabalhar com imagens
+\usepackage{graphicx}
+% Defini uma pasta básica para conter imagens
+\graphicspath{{Images/}} 
+
+% Pacote de idiomas responsável pelo quebrar e colocar hifém nas palavras
+\usepackage[portuguese]{babel}
+
+% Para customizar as listas
+\usepackage{enumitem} 
+\setlist{nolistsep} 
+
+% Para as tabelas nos padrões do livro 
+\usepackage{booktabs}
+
+% Pacote usado para especificar cores
+\usepackage{xcolor}
+
+% ===================================================
+% Pacotes e configuração de algoritmos
+% ===================================================
+\usepackage[portuguese,ruled,lined, linesnumbered]{algorithm2e}
+\usepackage{algorithmic}
+
+% ===================================================
+% Pacote e configuração das fontes
+% ===================================================
+
+% Use the Avantgarde font 
+\usepackage{avant}
+
+ % Use the Times font
+%\usepackage{times}
+
+% Para fontes matemáticas \usepackage{mathptmx} 
+%\usepackage{mathptmx} 
+
+% Slightly tweak font spacing for aesthetics
+\usepackage{microtype} 
+
+% Para entrada de texto com acentos
+\usepackage[utf8]{inputenc}
+
+% Codificação de 8-bits para os caracteres
+\usepackage[T1]{fontenc}
+
+% Pacote adicional para a citações
+\usepackage{csquotes}
+
+% Pacote para colorir as linhas e colunas das tabelas
+\usepackage{colortbl}
+
+% ===================================================
+% Pacote e configuração da geometria das páginas
+% ===================================================
+\usepackage{geometry}
+
+\geometry{
+	paper=a4paper, 
+	top=3cm,
+	bottom=3cm,
+	left=3cm,
+	right=3cm,
+	headheight=14pt,
+	footskip=1.4cm,
+	headsep=10pt, 
+	%showframe, % Uncomment to show how the type block is set on the page
+}
+
+% ===================================================
+% Definido cores
+% ===================================================
+\definecolor{ocre}{RGB}{243, 102, 25}
+%\definecolor{ocre}{RGB}{143, 102, 150} 
+\definecolor{cinzaClaro}{gray}{0.9}
+\definecolor{meu-azul}{RGB}{135, 206, 250}
+\definecolor{notas-azul}{RGB}{35, 206, 250}
+\definecolor{palegreen}{RGB}{152, 251, 152}
+\definecolor{ivory}{RGB}{255, 255, 240}
+\definecolor{linha-metodo}{RGB}{77, 90, 140}
+\definecolor{interno-metodo}{RGB}{210, 230, 228}
+
+% ===================================================
+% Pacotes para a bibliografia e o índice
+% ===================================================
+
+% Para bibliografia
+\usepackage{natbib}
+
+% Usado para melhorar a estética dos títulos
+\usepackage{calc} 
+
+% Para construção do índice
+\usepackage{makeidx}
+\makeindex 
+
+
+% ===================================================
+% Pacote para colocar a plaquinha nos comentários
+% ===================================================
+\usepackage{manfnt}
+
+
+% ===================================================
+% Pacote para computar e exibir o horário
+% ===================================================
+\usepackage{fancyhdr}
+\usepackage[yyyymmdd,hhmmss]{datetime}
