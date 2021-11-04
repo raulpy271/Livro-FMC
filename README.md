@@ -19,7 +19,7 @@ O Professor Valdigleis S. Costa sob a Tutela de [Benjamín Bedregal](https://doc
 
 ## Contribuções
 
-- Quaisquer erros devem ser enviadas na página de [isses](https://gitlab.com/valdigleis/Book-FMC/-/issues) do projeto.
+- Quaisquer erros devem ser enviadas na página de [isses](https://github.com/valdigleis/Livro-FMC/issues) do projeto.
 - Também estou aberto a sugestões organizacional ou de conteúdo, por favor enviar as sugestões via o correio eletrônico: valdigleis.costa@univasf.edu.br.
 
 
