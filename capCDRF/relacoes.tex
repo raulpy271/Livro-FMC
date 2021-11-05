@@ -368,6 +368,52 @@ Uma operação natural que surge para as relações é a noção de composição
 \end{exem}
 
 
+\section{Tipos e Propriedades das Relações Binárias}
+
+Deste ponto em diante todas as relações consideradas até o final deste capítulo serão relações binárias sobre um conjunto não vazio $A$ genérico, ou seja, tem-se que se $R$ for uma relação, então $R \subseteq A \times A$. Dito isto, pode-se apresentar alguns ``tipos'' em que as relações binárias podem ser classificadas.
+
+\begin{definition}[Identidade]\label{def:RelacaoIdentica}
+	Uma relação $R$ é dita ser relação de identidade (ou relação idêntica \cite{abe1991-TC}) sempre que $R$ é igual ao conjunto $\{(x, x) \mid x \in A\}$.
+\end{definition}
+
+\begin{exem}
+	Seja $A = \{1, 2, 3, 4\}$ a relação $M = \{(3, 3), (1, 1), (2,2)\}$ é uma relação de identidade, já a relação $Q = \{(1, 1), (2,2), (3,4)\}$ não é uma relações de identidade.
+\end{exem}
+
+\begin{rema}
+	Quando uma relação de identidade possui para todos os $x \in A$  os pares da forma $(x, x)$, essa relação é chamada de identidade do conjunto $A$ (ou simplesmente identidade de $A$), e nesse caso tal relação é denotado por $Id_A$.
+\end{rema}
+
+\begin{theorem}[Neutralidade da relação de identidade]\label{teo:NeutralidadeRelacaoIdentidade}
+	Se $R$ é uma relação, então as seguintes igualdade são verdadeiras:
+	\begin{itemize}
+		\item[(i)] $R \circ Id_A = R$.
+		\item[(ii)] $Id_A \circ R = R$.
+	\end{itemize}
+\end{theorem}
+
+\begin{proof}
+	(i) Suponha que $R$ é uma relação, assim tem-se que:
+	\begin{eqnarray*}
+		(x, y) \in R \circ Id_A  & \Longleftrightarrow & (\exists x \in A)[x \mathrel{Id_A} x \text{ e } x \mathrel{R} y]\\
+		& \Longleftrightarrow & (\exists x \in A)[x \mathrel{R} y]\\
+		& \Longleftrightarrow & (x, y) \in R 
+	\end{eqnarray*}
+	Portanto,  $R \circ Id_A = R$. (ii) Similar a demonstração do item anterior.
+\end{proof}
+
+\begin{prop}
+	Se $A$ é um conjunto não vazio, então $I_A^{-1} = I_A$.
+\end{prop}
+
+\begin{proof}
+	Trivial pelas definições de relação inversa e de relação de identidade.
+\end{proof}
+
+\begin{definition}[Reflexividade]\label{def:RelacaoReflexiva}
+	Uma relação $R$ é dita ser reflexiva quando para todo $x \in A$ tem-se que $x \mathrel{R} x$.
+\end{definition}
+
 \section{Questionário}
 
 \begin{exercise}\label{exerc:Relcacoes1}
@@ -438,11 +484,6 @@ Uma operação natural que surge para as relações é a noção de composição
 	\item $R_1 = \{(x, y) \in \mathbb{N} \times \mathbb{N} \mid 0 \leq x, y \leq 6, y = 2x\}$\footnote{Na relação $\leq$ quando é escrito que $0 \leq x, y \leq z$ significa que ambas as desigualdades $0 \leq x\leq z$ e $0 \leq y \leq z$ são verdadeiras, porém, não se tem qualquer informação acerca da tricotomia entre os elementos $x$ e $y$.}.
 	\item $R_2 = \{(x, y) \in \mathbb{N} \times \mathbb{N} \mid 0 \leq x \leq 5, 1 \leq y \leq 4, (x-y) \in \mathbb{N} \}$.
 	\item $R_3 = \{(a,b), (e, c), (a, c), (o, c), (i, (d,f)), ((o, u), b), ((o, u), c), (u, b) \}$.
-	\item $B \times (A \times C)$.
-	\item $C^2 \times B$.
-	\item $C^3 \times C$.
-	\item $A \times C^2$.
-	\item $B \times (C \cup A)$.
-	\item $(A \cup C)^2 \times A$.
-	\item $A^2 \times B \times C^2$.
+	\item $R_4 = \{(x_0, x_1) \mid x_0 \text{ é uma concoante e } x_1 \text{ é uma vogal} \}$.
+	\item $R_5 = \{(x, y) \in \mathbb{N} \times \mathbb{N} \mid x + x = x, x + y = y\}$.
 \end{enumerate}
