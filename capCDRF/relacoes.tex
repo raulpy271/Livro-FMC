@@ -79,7 +79,7 @@ Um caso particular do produto Cartesiano e o chamado Cartesiano quadrado apresen
 \end{theorem}
 
 \begin{proof}
-	$(\Rightarrow)$ Por contra-positiva assuma que $A \neq \emptyset$ e $B \neq \emptyset$, assim tem-se que existem $x \in A$ e $y \in B$, consequentemente, pela definição de produto cartesiano existe $(x,y) \in A \times B$, assim tem-se que, $A \times B \neq \emptyset$, e portanto, a afirmação: Se $A \times B = \emptyset$, então $A = \emptyset$ ou $B = \emptyset$ é verdadeira.
+	$(\Rightarrow)$ Por contrapositiva assuma que $A \neq \emptyset$ e $B \neq \emptyset$, assim tem-se que existem $x \in A$ e $y \in B$, consequentemente, pela definição de produto cartesiano existe $(x,y) \in A \times B$, assim tem-se que, $A \times B \neq \emptyset$, e portanto, a afirmação: Se $A \times B = \emptyset$, então $A = \emptyset$ ou $B = \emptyset$ é verdadeira.
 	
 	$(\Leftarrow)$ Suponha que $A = \emptyset$ ou $B = \emptyset$, assim por vacuidade é claro que $A \times B = \emptyset$.
 \end{proof}
@@ -225,7 +225,7 @@ Quando os conjuntos $A_1, A_2, \cdots, A_n$ são todos conjuntos finitos, uma es
 	De forma contrária ao que acontecer nos diagramas de árvores nas área de estrutura de dados \cite{jaime1994}, linguagens formais \cite{benjaLivro2010, hopcroft2008, linz2006}  e compiladores \cite{aho2007, cooper2017}, os diagramas de árvore na teoria dos conjuntos são construídos de forma horizontal no sentido da esquerda para à direita.
 \end{rema}
 
-Em um diagrama de árvore o número de níveis na árvore é igual ao número de conjuntos envolvidos no Cartesiano mais 2, ou seja, para cada produto Cartesiano $n$-ário, o número de níveis na árvore que gera/representa tal cartesiano é igual a $n+2$. O diagrama é construindo por níveis da seguinte forma: Seguido a sequência dos conjuntos no Cartesiano $A_1 \times \cdots \times A_n$, para todo $1 \leq i \leq n$ cada nível $i$ do diagrama de árvore vai ser preenchido pelos elementos do conjunto $A_i$, com o conjunto $A_i$ sendo repetido exatamente $2^{i-1}$ vezes a cada nível $i$, no nível inicial da árvore (nível 0) é colocado o símbolo de inicio da árvore, neste manuscrito será usado o $\bullet$ como símbolo inicial, e no último nível da árvore (ou nível EPC) estão os elementos do produto Cartesiano em si. 
+Em um diagrama de árvore o número de níveis na árvore é igual ao número de conjuntos envolvidos no Cartesiano mais 2, ou seja, para cada produto Cartesiano $n$-ário, o número de níveis na árvore que gera/representa tal cartesiano é igual a $n+2$. O diagrama é construindo por níveis da seguinte forma: Seguido a sequência dos conjuntos no Cartesiano $A_1 \times \cdots \times A_n$, para todo $1 \leq i \leq n$ cada nível $i$ do diagrama de árvore vai ser preenchido pelos elementos do conjunto $A_i$, com o conjunto $A_i$ sendo repetido exatamente $2^{i-1}$ vezes a cada nível $i$, no nível inicial da árvore (nível 0) é colocado o símbolo de inicio da árvore, neste manuscrito será usado o $\ast$ como símbolo inicial, e no último nível da árvore (ou nível EPC) estão os elementos do produto Cartesiano em si. 
  
 \begin{exem}\label{exe:ArvoreDoCartesino}
 	Dado os conjuntos $\{-1, 1\}, \{a, b\}$ e $\{-1, 1\}$ tem-se que o produto Cartesiano $\{-1, 1\} \times \{a, b\} \times \{-1, 1\}$ pode ser representado pelo diagrama a seguir.
@@ -233,7 +233,7 @@ Em um diagrama de árvore o número de níveis na árvore é igual ao número de
 		\begin{tikzpicture}[grow'=right,level distance=1.25in,sibling distance=.25in]
 			\tikzset{edge from parent/.style= {thick, draw, edge from parent fork right}, every tree node/.style={align=center}}
 			\Tree 
-			[. $\bullet$ 
+			[. $\ast$
 				[.{$-1$}
 					[.{$a$}
 						[.{$-1$}
@@ -285,7 +285,7 @@ Em um diagrama de árvore o número de níveis na árvore é igual ao número de
 Apesar de ser uma ótima forma prática de representar e visualizar o produto Cartesiano, os diagramas de árvores tendem a não ser adotados com frequência pois seu crescimento se dá em proporções fatoriais, o que torna sua construção facilmente complexa.
 
 \begin{rema}
-	Para finalizar o tópico ligado ao produto Cartesiano o leitor deve ficar atento a alguns fatos de cunho sintático\footnote{Ótimas discussões sobre esses aspectos sintáticos do produto Cartesiano ocorreram nas páginas \url{encurtador.com.br/cdjBY} e \url{encurtador.com.br/pJLRZ}.} a respeito do produto Cartesiano, por exemplo, note que $A \times B \times C \neq A \times (B \times C) \neq (A \times B) \times C$. No primeiro produto os elementos gerados são da forma $(x, y, z)$, já no segundo os elementos terão a forma $(x, (y, z))$, e por fim, no terceiro produto os elementos tem a seguinte+ forma $((x,y), z)$ sendo $x \in A, y \in B$ e $z \in C$. Além disso, tem-se que o produto Cartesiano $A^n \times B = (\underbrace{A \times \cdots \times A}_{n-\text{vezes}}) \times B$. 
+	Para finalizar o tópico ligado ao produto Cartesiano o leitor deve ficar atento a alguns fatos de cunho sintático\footnote{Ótimas discussões sobre esses aspectos sintáticos do produto Cartesiano ocorreram de forma breve nas páginas \url{encurtador.com.br/cdjBY} e \url{encurtador.com.br/pJLRZ}.} a respeito do produto Cartesiano, por exemplo, note que $A \times B \times C \neq A \times (B \times C) \neq (A \times B) \times C$. No primeiro produto os elementos gerados são da forma $(x, y, z)$, já no segundo os elementos terão a forma $(x, (y, z))$, e por fim, no terceiro produto os elementos tem a seguinte forma $((x,y), z)$ sendo $x \in A, y \in B$ e $z \in C$. Além disso, tem-se que o produto Cartesiano $A^n \times B = (\underbrace{A \times \cdots \times A}_{n-\text{vezes}}) \times B$. 
 \end{rema}
 
 \section{Relações}\label{sec:Relacoes}
@@ -343,15 +343,15 @@ Uma vez que relações são conjuntos pode-se falar sobre as operações sobre r
 Uma operação natural que surge para as relações é a noção de composição entre duas relações $R_1$ e $R_2$, a ideia da composição é gerar uma terceira relação a partir das relações iniciais. A seguir este manuscrito apresenta formalmente o conceito de composição.
 
 \begin{definition}[Composição de relações]\label{def:ComposicaoRelacoes}
-	Seja $R_1$ uma relação de $A$ em $B$ e seja $R_2$ uma relação de $B$ em $C$, a composição de $R_1$ e $R_2$, denotada por $R_1 \circ R_2$, corresponde ao seguinte conjunto:
-	$$R_1 \circ R_2 = \{(x, z) \mid (\exists y \in B)[x\mathrel{R_1}y \text{ e } y\mathrel{R_2}z] \}$$ 
+	Seja $R_1$ uma relação de $A$ em $B$ e seja $R_2$ uma relação de $B$ em $C$, a composição de $R_1$ e $R_2$, denotada por $R_1 \bullet R_2$, corresponde ao seguinte conjunto:
+	$$R_1 \bullet R_2 = \{(x, z) \mid (\exists y \in B)[x\mathrel{R_1}y \text{ e } y\mathrel{R_2}z] \}$$ 
 \end{definition}
 
 \begin{prop}
 	Seja $R_1$ uma relação de $A$ em $B$ e seja $R_2$ uma relação de $B$ em $C$, então tem-se que:
 	\begin{itemize}
-		\item[(i)] $Dom(R_1 \circ R_2) \subseteq Dom(R_1)$.
-		\item[(ii)] $Ima(R_1 \circ R_2) \subseteq Ima(R_2)$.
+		\item[(i)] $Dom(R_1 \bullet R_2) \subseteq Dom(R_1)$.
+		\item[(ii)] $Ima(R_1 \bullet R_2) \subseteq Ima(R_2)$.
 	\end{itemize}
 \end{prop}
 
@@ -360,12 +360,20 @@ Uma operação natural que surge para as relações é a noção de composição
 \end{proof}
 
 \begin{exem}
-	Seja $R = A \times B$ e $Q = B \times C$ tem-se que $R \circ Q = A \times C$.
+	Sejam $R = A \times B$ e $Q = B \times C$ tem-se que $R \bullet Q = A \times C$.
 \end{exem}
 
 \begin{exem}
-	Seja $R_1 = \{(a, b), (i, b), (o, c), (o, e)\}$ e $R_2 = \{(b, 1), (b, -1), (c, 3), (d, 4)\}$ tem-se então que a composição de $R_1$ e $R_2$ é exatamente igual a relação $R = \{(a, 1), (a, -1),$ $(i, 1), (i, -1), (o, 3)\}$.
+	Sejam $R_1 = \{(a, b), (i, b), (o, c), (o, e)\}$ e $R_2 = \{(b, 1), (b, -1), (c, 3), (d, 4)\}$ tem-se então que a composição de $R_1$ e $R_2$ é exatamente igual a relação $R = \{(a, 1), (a, -1),$ $(i, 1), (i, -1), (o, 3)\}$.
 \end{exem}
+
+\begin{theorem}[Monotonicidade da Composição de Relações]
+	Seja $R_1$ e $R_2$ relações de $A$ em $B$. Se $R_1 \subseteq R_2$, então para toda relação $R_3$ de $B$ em $C$ tem-se que $(R_1 \bullet R_3) \subseteq (R_2 \bullet R_3)$
+\end{theorem}
+
+\begin{proof}
+	Suponha que $R_1$ e $R_2$ são ambas relações de $A$ em $B$ e que $R_1 \subseteq R_2$, agora note que para qualquer relação $R_3$ de $B$ em $C$ tem-se por definição que $(x, z) \in (R_1 \bullet R_3)$ se, e somente se, $(\exists y \in B)[x\mathrel{R_1}y \text{ e } y\mathrel{R_3}z]$, mas uma vez que, $R_1 \subseteq R_2$ é claro que $ (\exists y \in B)[x \mathrel{R_2}y \text{ e } y\mathrel{R_3}z]$, e assim $(x, z) \in (R_2 \bullet R_3)$, portanto, $(R_1 \bullet R_3) \subseteq (R_2 \bullet R_3)$, concluindo assim a prova.
+\end{proof}
 
 
 \section{Tipos e Propriedades das Relações Binárias}
@@ -381,38 +389,89 @@ Deste ponto em diante todas as relações consideradas até o final deste capít
 \end{exem}
 
 \begin{rema}
-	Quando uma relação de identidade possui para todos os $x \in A$  os pares da forma $(x, x)$, essa relação é chamada de identidade do conjunto $A$ (ou simplesmente identidade de $A$), e nesse caso tal relação é denotado por $Id_A$.
+	Quando para todos os $x \in A$ uma relação de identidade possuir os pares (e apenas eles) da forma $(x, x)$, essa relação é chamada de identidade do conjunto $A$ (ou simplesmente identidade de $A$), e nesse caso tal relação é denotado por $Id_A$.
 \end{rema}
 
 \begin{theorem}[Neutralidade da relação de identidade]\label{teo:NeutralidadeRelacaoIdentidade}
-	Se $R$ é uma relação, então as seguintes igualdade são verdadeiras:
+	Se $R$ é uma relação sobre $A$, então as seguintes igualdade são verdadeiras:
 	\begin{itemize}
-		\item[(i)] $R \circ Id_A = R$.
-		\item[(ii)] $Id_A \circ R = R$.
+		\item[(i)] $R \bullet Id_A = R$.
+		\item[(ii)] $Id_A \bullet R = R$.
 	\end{itemize}
 \end{theorem}
 
 \begin{proof}
-	(i) Suponha que $R$ é uma relação, assim tem-se que:
+	(i) Suponha que $R$ é uma relação sobre $A$, assim tem-se que:
 	\begin{eqnarray*}
-		(x, y) \in R \circ Id_A  & \Longleftrightarrow & (\exists x \in A)[x \mathrel{Id_A} x \text{ e } x \mathrel{R} y]\\
+		(x, y) \in R \bullet Id_A  & \Longleftrightarrow & (\exists y \in A)[x \mathrel{R} y \text{ e } y \mathrel{Id_A} y]\\
 		& \Longleftrightarrow & (\exists x \in A)[x \mathrel{R} y]\\
 		& \Longleftrightarrow & (x, y) \in R 
 	\end{eqnarray*}
-	Portanto,  $R \circ Id_A = R$. (ii) Similar a demonstração do item anterior.
+	Portanto,  $R \bullet Id_A = R$. (ii) Similar a demonstração do item anterior.
 \end{proof}
 
-\begin{prop}
+\begin{prop}\label{prop:ComplementarDaRelacaoIdentica}
 	Se $A$ é um conjunto não vazio, então $I_A^{-1} = I_A$.
 \end{prop}
 
 \begin{proof}
-	Trivial pelas definições de relação inversa e de relação de identidade.
+	Trivial pelas Definições \ref{def:RelacaoInversa} e \ref{def:RelacaoIdentica}.
 \end{proof}
+
+\begin{rema}\label{rema:UnicidadeDaRelacaoIdentica}
+	É fácil notar que para qualquer que seja o conjunto não vazio $A$ tem-se que a relação identidade $I_A$ é única.
+\end{rema}
 
 \begin{definition}[Reflexividade]\label{def:RelacaoReflexiva}
 	Uma relação $R$ é dita ser reflexiva quando para todo $x \in A$ tem-se que $x \mathrel{R} x$.
 \end{definition}
+
+Um leitor atento pode perceber que a relação identidade de um conjunto é sempre reflexiva, porém, o oposto não é verdadeiro como exposto no exemplo a seguir.
+
+\begin{exem}
+	Dado o conjunto $A = \{a, b, c\}$ tem-se que: 
+	\begin{itemize}
+		\item[(a)] $K = \{(a, a), (b, c), (b, b), (c, c), (a, c), (c, a)\}$ é uma relação reflexiva, mas não é a identidade do conjunto $A$.
+		\item[(a)] $M = \{(a, a), (b, b), (c, c) \}$ é uma relação reflexiva e é  também a relação identidade do conjunto $A$.
+	\end{itemize}
+\end{exem}
+
+Como dito em \cite{abe1991-TC}, uma relação $R$ não será reflexiva quando existir pelo menos um $x \in A$ tal que $x\centernot{R} x$.
+
+\begin{exem}
+	Dado o conjunto $L = \{0, 0.5, 1\}$ tem-se que o conjunto $Q$ formado pelos elementos $(0,0), (0,0.5)$ e $(1, 1)$ não é uma relação reflexiva, pois $0.5\centernot{R} 0.5$, ou seja, $(0.5, 0.5) \notin Q$.
+\end{exem}
+
+O próximo resultado estabelece uma caracterização para as relações serem reflexivas, isto é, tal resultado apresenta as condições suficientes e necessárias para que uma relação seja reflexiva.
+
+\begin{theorem}[Caracterização das Relações Reflexivas]\label{teo:CaracterizacaoRelacaoReflexivda}
+	Uma relação $R$ é reflexiva se, e somente se, $I_A \subset R$.
+\end{theorem}
+
+\begin{proof}
+	$(\Rightarrow)$ Suponha que $R$ seja reflexiva, logo por definição para todo $x \in A$ tem-se que $x \mathrel{R} x$, e portanto, pela Definição \ref{def:RelacaoIdentica} é claro que $I_A \subset R$.
+	
+	$(\Leftarrow)$ Assuma que $I_A \subset R$, agora uma vez que para todo $x \in A$ tem-se que $(x, x) \in I_A$, pela Definição \ref{def:RelacaoInclusao} segue que $(x, x) \in R$, isto é, tem-se que $x \mathrel{R} x$, e portanto, $R$ é reflexiva.
+\end{proof}
+
+\begin{corollary}\label{col:CaracterizacaoRelacaoReflexivda}
+	Uma relação $R$ é reflexiva se, e somente se, $R^{-1}$ é reflexiva.
+\end{corollary}
+
+\begin{proof}
+	Direto da Proposição \ref{prop:ComplementarDaRelacaoIdentica}.
+\end{proof}
+
+\begin{theorem}[Fecho Algébrico das Relações Reflexivas]
+	Se $R_1$ e $R_2$ são relações reflexivas sobre um mesmo conjunto $A$, então $R_1 \cup R_2$ e $R_1 \cap R_2$ são também relações reflexivas.
+\end{theorem}
+
+\begin{proof}
+	Assuma que $R_1$ e $R_2$ são relações reflexivas sobre um conjunto $A$, assim pelo Teorema \ref{teo:CaracterizacaoRelacaoReflexivda} tem-se que $I_A \subset R_1$ e $I_A \subset R_2$, agora pelo Teorema \ref{teo:MonotonicidadeDaUniaoIntersecao} tem-se a seguinte relação de inclusão:
+	$$R_1 \subseteq R_1 \cup R_2$$
+	logo, tem-se que $I_A \subset R_1 \subseteq R_1 \cup R_2$, consequentemente pelo Teorema \ref{teo:MonotonicidadeDaUniaoIntersecao} tem-se que $R_1 \cup R_2$ é uma relação reflexiva. Agora suponha por absurdo que $I_A \not\subset (R_1 \cap R_2)$, logo existe $(x, x) \in I_A$ tal que $(x, x) \notin (R_1 \cap R_2)$, consequentemente pela Definição \ref{def:IntersecaoConjuntos} tem-se que $(x, x) \notin R_1$ e $(x, x) \notin R_2$, o que contradiz a hipótese de que $R_1$ e $R_2$ sejam relações reflexivas, isto é, contradiz a hipótese de $I_A \subset R_1$ e $I_A \subset R_2$, e portanto, $I_A \subset (R_1 \cap R_2)$, logo Teorema \ref{teo:CaracterizacaoRelacaoReflexivda} tem-se que $R_1 \cap R_2$ é também uma relação reflexiva.
+\end{proof}
+
 
 \section{Questionário}
 
