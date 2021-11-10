@@ -367,12 +367,20 @@ Uma operação natural que surge para as relações é a noção de composição
 	Sejam $R_1 = \{(a, b), (i, b), (o, c), (o, e)\}$ e $R_2 = \{(b, 1), (b, -1), (c, 3), (d, 4)\}$ tem-se então que a composição de $R_1$ e $R_2$ é exatamente igual a relação $R = \{(a, 1), (a, -1),$ $(i, 1), (i, -1), (o, 3)\}$.
 \end{exem}
 
-\begin{theorem}[Monotonicidade da Composição de Relações]
+\begin{theorem}[Monotonicidade da Composição de Relações]\label{teo:MonotonicidadeComposicaoRelacoes}
 	Seja $R_1$ e $R_2$ relações de $A$ em $B$. Se $R_1 \subseteq R_2$, então para toda relação $R_3$ de $B$ em $C$ tem-se que $(R_1 \bullet R_3) \subseteq (R_2 \bullet R_3)$
 \end{theorem}
 
 \begin{proof}
 	Suponha que $R_1$ e $R_2$ são ambas relações de $A$ em $B$ e que $R_1 \subseteq R_2$, agora note que para qualquer relação $R_3$ de $B$ em $C$ tem-se por definição que $(x, z) \in (R_1 \bullet R_3)$ se, e somente se, $(\exists y \in B)[x\mathrel{R_1}y \text{ e } y\mathrel{R_3}z]$, mas uma vez que, $R_1 \subseteq R_2$ é claro que $ (\exists y \in B)[x \mathrel{R_2}y \text{ e } y\mathrel{R_3}z]$, e assim $(x, z) \in (R_2 \bullet R_3)$, portanto, $(R_1 \bullet R_3) \subseteq (R_2 \bullet R_3)$, concluindo assim a prova.
+\end{proof}
+
+\begin{corollary}\label{col:MonotonicidadeComposicaoRelacoes}
+	Se $R_1, R_2, S_1, S_2$ são relações tais que $R_1 \subseteq R_2$ e $S_1 \subseteq S_2$ com $Ima(R_1) = Dom(S_1)$ e $Ima(R_2) = Dom(S_2)$, então $(R_1 \bullet S_1) \subseteq (R_2 \bullet S_2)$.
+\end{corollary}
+
+\begin{proof}
+	Suponha que $R_1, R_2, S_1, S_2$ são relações tais que $R_1 \subseteq R_2$ e $S_1 \subseteq S_2$ com $Ima(R_1) = Dom(S_1)$ e $Ima(R_2) = Dom(S_2)$, assim pelo Teorema \ref{teo:MonotonicidadeComposicaoRelacoes} tem-se que $(R_1 \bullet S_1) \subseteq (R_2 \bullet S_1)$. Agora note que por definição $(x, z) \in (R_2 \bullet S_1)$ se, e somente se, $(\exists y \in Dom(S_1))[x\mathrel{R_2}y \text{ e } y\mathrel{S_1}z]$, mas uma vez que $S_1 \subseteq S_2$ tem-se que $Dom(S_1) \subseteq Dom(S_2)$ e $Ima(S_1) \subseteq Ima(S_2)$ e assim é claro que $(\exists y \in Dom(S_2))[x\mathrel{R_2}y \text{ e } y\mathrel{S_2}z]$, logo $(x, z) \in (R_2 \bullet S_2)$, consequentemente pela definição de subconjunto tem-se que $(R_2 \bullet S_1) \subseteq (R_2 \bullet S_2)$. E portanto, $(R_1 \bullet S_1) \subseteq (R_2 \bullet S_2)$.
 \end{proof}
 
 
@@ -389,7 +397,7 @@ Deste ponto em diante todas as relações consideradas até o final deste capít
 \end{exem}
 
 \begin{rema}
-	Quando para todos os $x \in A$ uma relação de identidade possuir os pares (e apenas eles) da forma $(x, x)$, essa relação é chamada de identidade do conjunto $A$ (ou simplesmente identidade de $A$), e nesse caso tal relação é denotado por $Id_A$.
+	Quando para todos os $x \in A$ uma relação de identidade possuir exatamente todos os pares da forma $(x, x)$, essa relação é chamada de identidade do conjunto $A$ (ou simplesmente identidade de $A$), e nesse caso tal relação é denotado por $Id_A$.
 \end{rema}
 
 \begin{theorem}[Neutralidade da relação de identidade]\label{teo:NeutralidadeRelacaoIdentidade}
@@ -459,17 +467,45 @@ O próximo resultado estabelece uma caracterização para as relações serem re
 \end{corollary}
 
 \begin{proof}
-	Direto da Proposição \ref{prop:ComplementarDaRelacaoIdentica}.
+	Direto pela definição de relação inversa e pela Proposição \ref{prop:ComplementarDaRelacaoIdentica}.
 \end{proof}
 
-\begin{theorem}[Fecho Algébrico das Relações Reflexivas]
-	Se $R_1$ e $R_2$ são relações reflexivas sobre um mesmo conjunto $A$, então $R_1 \cup R_2$ e $R_1 \cap R_2$ são também relações reflexivas.
+\begin{theorem}[Fecho Algébrico das Relações Reflexivas]\label{teo:FechoAlgebricoRelacoesReflexivas}
+	Se $R_1$ e $R_2$ são relações reflexivas sobre o mesmo conjunto, então $R_1 \cup R_2$ e $R_1 \cap R_2$ são também relações reflexivas.
 \end{theorem}
 
 \begin{proof}
 	Assuma que $R_1$ e $R_2$ são relações reflexivas sobre um conjunto $A$, assim pelo Teorema \ref{teo:CaracterizacaoRelacaoReflexivda} tem-se que $I_A \subset R_1$ e $I_A \subset R_2$, agora pelo Teorema \ref{teo:MonotonicidadeDaUniaoIntersecao} tem-se a seguinte relação de inclusão:
 	$$R_1 \subseteq R_1 \cup R_2$$
-	logo, tem-se que $I_A \subset R_1 \subseteq R_1 \cup R_2$, consequentemente pelo Teorema \ref{teo:MonotonicidadeDaUniaoIntersecao} tem-se que $R_1 \cup R_2$ é uma relação reflexiva. Agora suponha por absurdo que $I_A \not\subset (R_1 \cap R_2)$, logo existe $(x, x) \in I_A$ tal que $(x, x) \notin (R_1 \cap R_2)$, consequentemente pela Definição \ref{def:IntersecaoConjuntos} tem-se que $(x, x) \notin R_1$ e $(x, x) \notin R_2$, o que contradiz a hipótese de que $R_1$ e $R_2$ sejam relações reflexivas, isto é, contradiz a hipótese de $I_A \subset R_1$ e $I_A \subset R_2$, e portanto, $I_A \subset (R_1 \cap R_2)$, logo Teorema \ref{teo:CaracterizacaoRelacaoReflexivda} tem-se que $R_1 \cap R_2$ é também uma relação reflexiva.
+	logo, tem-se que $I_A \subset R_1 \subseteq R_1 \cup R_2$, consequentemente pelo Teorema \ref{teo:MonotonicidadeDaUniaoIntersecao} tem-se que $R_1 \cup R_2$ é uma relação reflexiva. Agora suponha por absurdo que $I_A \not\subset (R_1 \cap R_2)$, logo existe $(x, x) \in I_A$ tal que $(x, x) \notin (R_1 \cap R_2)$, consequentemente pela Definição \ref{def:IntersecaoConjuntos} tem-se que $(x, x) \notin R_1$ e $(x, x) \notin R_2$, o que contradiz a hipótese de que $R_1$ e $R_2$ sejam relações reflexivas, isto é, contradiz a hipótese de $I_A \subset R_1$ e $I_A \subset R_2$, e portanto, $I_A \subset (R_1 \cap R_2)$, logo pelo Teorema \ref{teo:CaracterizacaoRelacaoReflexivda} tem-se que $R_1 \cap R_2$ é também uma relação reflexiva.
+\end{proof}
+
+\begin{theorem}
+	Seja $R_1$ uma relação reflexiva sobre um conjunto $A$ e seja $R_2$ um relação qualquer sobre o conjunto $A$, tem-se $R_1 \cup R_2$ é uma relação reflexiva.
+\end{theorem}
+
+\begin{proof}
+	A demonstração é trivial e ficará como exercício ao leitor.
+\end{proof}
+
+\begin{theorem}
+	Se $R$ é uma relação reflexiva, então $R \bullet R^{-1}$ e $R^{-1} \bullet R$ são também relações reflexivas.
+\end{theorem}
+
+\begin{proof}
+	Assuma que $R$ é uma relação reflexiva sobre um conjunto $A$, assim pelo Corolário \ref{col:CaracterizacaoRelacaoReflexivda} tem-se que $R^{-1}$ é uma relação reflexiva. Assim pelo Teorema \ref{teo:CaracterizacaoRelacaoReflexivda} tem-se que $I_A \subseteq R$ e $I_A \subseteq R^{-1}$, consequentemente, pelo Corolário \ref{col:MonotonicidadeComposicaoRelacoes} tem-se que $(I_A \bullet I_A) \subseteq (R \bullet R^{-1})$ e $(I_A \bullet I_A) \subseteq (R^{-1} \bullet R)$, mas pela neutralidade da relação identidade (Teorema \ref{teo:NeutralidadeRelacaoIdentidade}) tem-se que $I_A \bullet I_A = I_A$, assim tem-se que  $I_A \subseteq (R \bullet R^{-1})$ e $I_A \subseteq (R^{-1} \bullet R)$, e portanto, $R \bullet R^{-1}$ e $R^{-1} \bullet R$ são relações reflexivas.
+\end{proof}
+
+\begin{theorem}
+	Se $R$ é uma relação reflexiva, então as seguintes afirmações são verdadeiras.
+	\begin{itemize}
+		\item[(i)] $R \subset R \bullet R$.
+		\item[(ii)] $R \bullet R$ é reflexiva.
+	\end{itemize}
+\end{theorem}
+
+\begin{proof}
+	A demonstração é simples e fica como exercício ao leitor.
 \end{proof}
 
 
