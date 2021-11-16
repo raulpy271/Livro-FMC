@@ -388,7 +388,7 @@ Uma operação natural que surge para as relações é a noção de composição
 
 Deste ponto em diante todas as relações consideradas até o final deste capítulo serão relações binárias sobre um conjunto não vazio $A$ genérico, ou seja, tem-se que se $R$ for uma relação, então $R \subseteq A \times A$. Dito isto, pode-se apresentar alguns ``tipos'' em que as relações binárias podem ser classificadas.
 
-\begin{definition}[Identidade]\label{def:RelacaoIdentica}
+\begin{definition}[Tipo Identidade]\label{def:RelacaoIdentica}
 	Uma relação $R$ é dita ser relação de identidade (ou relação idêntica \cite{abe1991-TC}) sempre que $R$ é igual ao conjunto $\{(x, x) \mid x \in A\}$.
 \end{definition}
 
@@ -430,7 +430,7 @@ Deste ponto em diante todas as relações consideradas até o final deste capít
 	É fácil notar que para qualquer que seja o conjunto não vazio $A$ tem-se que a relação identidade $I_A$ é única.
 \end{rema}
 
-\begin{definition}[Reflexividade]\label{def:RelacaoReflexiva}
+\begin{definition}[Tipo Reflexivo]\label{def:RelacaoReflexiva}
 	Uma relação $R$ é dita ser reflexiva quando para todo $x \in A$ tem-se que $x \mathrel{R} x$.
 \end{definition}
 
@@ -467,7 +467,7 @@ O próximo resultado estabelece uma caracterização para as relações serem re
 \end{corollary}
 
 \begin{proof}
-	Direto pela definição de relação inversa e pela Proposição \ref{prop:ComplementarDaRelacaoIdentica}.
+	A demonstração é simples e fica como exercício ao leitor.
 \end{proof}
 
 \begin{theorem}[Fecho Algébrico das Relações Reflexivas]\label{teo:FechoAlgebricoRelacoesReflexivas}
@@ -508,6 +508,25 @@ O próximo resultado estabelece uma caracterização para as relações serem re
 	A demonstração é simples e fica como exercício ao leitor.
 \end{proof}
 
+Um segundo tipo de relações binárias é o tipo irreflexivo, de um certo ponto de vista, tal tipo de relação pode ser visto como sendo o contraponto do tipo reflexivo.
+
+\begin{definition}[Tipo Irreflexivo]\label{def:RelacaoIrreflexiva}
+	Uma relação $R$ é dita ser irreflexiva quando para todo $x \in A$ tem-se que $x \centernot{R} x$.
+\end{definition}
+
+\begin{exem}
+	Seja $P$ o conjunto de todas as pessoas, e seja $R$ a relação ``ser vó'', tem-se que $R$ é irreflexiva pois é claro que ninguém pode ser vó de si próprio, portanto, para todo $x \in P$ tem-se que $x \centernot{R} x$.
+\end{exem}
+
+\begin{exem}
+	Seja $\mathbb{N}_1 = \{x \in \mathbb{N} \mid x > 0\}$ tem-se que a relação $R$ definida sobre $\mathbb{N}_1$ como sendo $x \centernot{R} y \Longleftrightarrow y = 2x$ é irreflexiva.
+\end{exem}
+
+Seguindo com a tipagem das relações binárias,  a seguir este manuscrito irá apresentar os tipos: simétrico, assimétrico e anti-simétricos.
+
+\begin{definition}[Tipo Simétrico]\label{def:RelacaoSimétrica}
+	Uma relação $R$ é dita ser simétrica quando para todo $x, y \in A$ se $x \mathrel{R} y$, então $y \mathrel{R} x$.
+\end{definition}
 
 \section{Questionário}
 
@@ -581,4 +600,14 @@ O próximo resultado estabelece uma caracterização para as relações serem re
 	\item $R_3 = \{(a,b), (e, c), (a, c), (o, c), (i, (d,f)), ((o, u), b), ((o, u), c), (u, b) \}$.
 	\item $R_4 = \{(x_0, x_1) \mid x_0 \text{ é uma concoante e } x_1 \text{ é uma vogal} \}$.
 	\item $R_5 = \{(x, y) \in \mathbb{N} \times \mathbb{N} \mid x + x = x, x + y = y\}$.
+\end{enumerate}
+
+\begin{exercise}\label{exerc:Relcacoes6}
+	Determine o domínio, imagem e a relação inversa das seguintes relações binárias.
+\end{exercise}
+
+\begin{enumerate}
+	\item Relação igualdade $(=)$ sobre o conjunto $\mathbb{N}_1$ com $\mathbb{N}_1 = \{x \in \mathbb{N} \mid x > 0\}$. 
+	\item Relação ``maior que'' sobre o conjunto $\{1,2,3,4,5,6\}$.
+	\item Relação $\subseteq$ sobre um conjunto $\wp(A)$ com $A$ sendo um conjunto arbitrário.
 \end{enumerate}
